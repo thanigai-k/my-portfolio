@@ -12,7 +12,19 @@
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/nunito-sans": "^5.2.7",
+    "@fontsource/roboto": "^5.2.9",
+    "@fontsource/sora": "^5.2.8",
+    "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
-    "sharp": "^0.34.3"
+    "clsx": "^2.1.1",
+    "sharp": "^0.34.3",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19"
   }
 }

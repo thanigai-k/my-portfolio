@@ -1,0 +1,43 @@
+---
+type Props = {
+  role: string;
+  company: string;
+  companyUrl: string;
+  durationRange: string[];
+};
+const { role, company, durationRange, companyUrl } = Astro.props;
+---
+
+<header class="flex flex-row justify-between items-center text-base not-prose">
+  <div>
+    <h3 class="text-primary font-medium">{role}</h3>
+    <h4 class="text-secondary">
+      <a
+        href={companyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="no-underline flex flex-row items-center gap-1"
+      >
+        <span>{company}</span>
+        <svg
+          aria-hidden="true"
+          fill="none"
+          height="18"
+          viewBox="0 0 18 18"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+          class="size-3 select-none"
+          ><path
+            d="M10.5 2.75H15.25M15.25 2.75V7.5M15.25 2.75L9 9M13.25 10.5V13.25C13.25 14.355 12.355 15.25 11.25 15.25H4.75C3.645 15.25 2.75 14.355 2.75 13.25V6.75C2.75 5.645 3.645 4.75 4.75 4.75H7.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"></path>
+        </svg>
+      </a>
+    </h4>
+  </div>
+  <p class="text-secondary">
+    {durationRange[0]} - {durationRange[1]}
+  </p>
+</header>

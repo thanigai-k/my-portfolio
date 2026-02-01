@@ -1,0 +1,25 @@
+---
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+const { title, description, image, heading } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+  </head>
+  <body
+    class="text-primary bg-canvas text-base leading-[1.75] tracking-wide md:p-20 p-4 flex md:gap-10 gap-2 md:flex-row flex-col"
+  >
+    <Header />
+    <main class="max-w-2xl space-y-7 grow">
+      {heading && <h1 class="text-2xl text-primary">{heading}</h1>}
+      <slot />
+    </main>
+  </body>
+</html>

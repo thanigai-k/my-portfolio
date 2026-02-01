@@ -1,0 +1,16 @@
+---
+import MainLayout from "../components/MainLayout.astro";
+import { Content } from "../content/experiences.mdx";
+---
+
+<MainLayout
+  title="My Experiences | Thanigaivel"
+  description="Lorem ipsum dolor sit amet"
+  heading="Experiences"
+>
+  <div
+    class="prose prose-em:text-secondary prose-em:not-italic prose-ul:leading-relaxed"
+  >
+    <Content />
+  </div>
+</MainLayout>
