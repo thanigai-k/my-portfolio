@@ -3,6 +3,17 @@
 @import "tw-shimmer";
 
 @layer base {
+  /* In your global CSS */
+  html {
+    font-size: 18px; /* mobile - 1rem = 16px */
+  }
+
+  @media (min-width: 768px) {
+    html {
+      font-size: 16px; /* tablet - 1rem = 18px */
+    }
+  }
+
   body {
     font-family: "IBM Plex Sans", sans-serif;
     /* font-family: "Inter", sans-serif; */
