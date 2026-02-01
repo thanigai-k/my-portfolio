@@ -5,9 +5,37 @@ import "@fontsource/ibm-plex-sans/500.css";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import { fade } from "astro:transitions";
 
 const { title, description, image, heading } = Astro.props;
+
+const blurTransition = {
+  forwards: {
+    old: {
+      name: "blur-out",
+      duration: "0.2s",
+      easing: "ease-in",
+    },
+    new: {
+      name: "blur-in",
+      duration: "0.8s",
+      easing: "ease-out",
+    },
+  },
+  backwards: {
+    old: {
+      name: "blur-in",
+      duration: "0.2s",
+      easing: "ease-out",
+      direction: "reverse",
+    },
+    new: {
+      name: "blur-out",
+      duration: "0.8s",
+      easing: "ease-in",
+      direction: "reverse",
+    },
+  },
+};
 ---
 
 <html lang="en">
@@ -20,12 +48,34 @@ const { title, description, image, heading } = Astro.props;
     <Header />
     <main
       class="max-w-2xl space-y-7 grow h-[calc(100dvh-80px)] md:h-auto overflow-y-auto"
-      transition:animate={fade({
-        duration: "0.3s",
-      })}
+      transition:animate={blurTransition}
     >
       {heading && <h1 class="text-2xl text-primary">{heading}</h1>}
       <slot />
     </main>
   </body>
 </html>
+
+<style is:global>
+  @keyframes blur-out {
+    from {
+      filter: blur(0);
+      opacity: 1;
+    }
+    to {
+      filter: blur(8px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes blur-in {
+    from {
+      filter: blur(8px);
+      opacity: 0;
+    }
+    to {
+      filter: blur(0);
+      opacity: 1;
+    }
+  }
+</style>
