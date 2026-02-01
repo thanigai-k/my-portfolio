@@ -18,6 +18,7 @@ const { Content } = await render(post);
 ---
 
 <MainLayout title={post.data.title} description={post.data.description}>
+  <a href="/thoughts" class="text-sm mb-8 inline-block text-secondary">Back</a>
   <div class="prose">
     <Content />
   </div>
