@@ -19,7 +19,7 @@ const { title, description, image, heading } = Astro.props;
   >
     <Header />
     <main
-      class="max-w-2xl space-y-7 grow"
+      class="max-w-2xl space-y-7 grow h-[calc(100dvh-80px)] md:h-auto overflow-y-auto"
       transition:animate={fade({
         duration: "0.3s",
       })}
