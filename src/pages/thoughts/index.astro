@@ -19,10 +19,12 @@ const posts = (await getCollection("blog")).sort(
   heading="My Thoughts"
 >
   <section class="text-lg">
-    <ul class="space-y-2">
+    <ul
+      class="[&:has(li:hover)_li]:opacity-30 [&:has(li:hover)_li:hover]:opacity-100"
+    >
       {
         posts.map((post) => (
-          <li class="flex justify-between gap-2 items-center">
+          <li class="flex justify-between gap-2 items-center transition-opacity duration-200 leading-loose">
             <a href={`/thoughts/${post.id}/`}>{post.data.title}</a>
             <span class="h-0.5 bg-red-500 shrink" />
             <p class="text-sm">
@@ -34,3 +36,6 @@ const posts = (await getCollection("blog")).sort(
     </ul>
   </section>
 </MainLayout>
+
+<!-- REference -->
+<!-- [&:has(li:hover)_li]:opacity-20 [&:has(li:hover)_li:hover]:opacity-100 -->

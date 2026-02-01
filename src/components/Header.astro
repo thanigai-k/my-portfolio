@@ -6,7 +6,9 @@ import HeaderLink from "./HeaderLink.astro";
   class="border-0 md:border-r border-gray-300 md:text-right md:pe-12 lowercase font-mono text-sm fixed z-10 bg-canvas md:w-auto w-full start-0 bottom-0 md:static px-4 md:px-0 py-4 md:py-0"
   transition:persist="header"
 >
-  <nav class="flex flex-row md:gap-1 md:flex-col gap-2 justify-evenly">
+  <nav
+    class="flex flex-row md:gap-1 md:flex-col gap-2 justify-evenly md:sticky top-20"
+  >
     <HeaderLink href="/">about</HeaderLink>
     <HeaderLink href="/thoughts">Thoughts</HeaderLink>
     <HeaderLink href="/projects"> Projects</HeaderLink>
@@ -14,7 +16,11 @@ import HeaderLink from "./HeaderLink.astro";
   </nav>
   <script is:inline define:vars={{ baseUrl: import.meta.env.BASE_URL }}>
     function updateHeaderActiveState() {
-      const pathname = (window.location.pathname.replace(baseUrl, "") || "/").replace(/\/$/, "") || "/";
+      const pathname =
+        (window.location.pathname.replace(baseUrl, "") || "/").replace(
+          /\/$/,
+          ""
+        ) || "/";
       const segment = pathname.match(/[^/]+/g)?.[0];
       const activeHref = pathname === "/" ? "/" : "/" + (segment ?? "");
       document.querySelectorAll("[data-header-link]").forEach((link) => {
