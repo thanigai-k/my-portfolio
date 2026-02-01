@@ -5,6 +5,7 @@ import "@fontsource/ibm-plex-sans/500.css";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import { fade } from "astro:transitions";
 
 const { title, description, image, heading } = Astro.props;
 ---
@@ -17,7 +18,12 @@ const { title, description, image, heading } = Astro.props;
     class="text-primary bg-canvas text-base leading-[1.75] tracking-wide md:p-20 p-4 flex md:gap-10 gap-2 md:flex-row flex-col"
   >
     <Header />
-    <main class="max-w-2xl space-y-7 grow">
+    <main
+      class="max-w-2xl space-y-7 grow"
+      transition:animate={fade({
+        duration: "0.3s",
+      })}
+    >
       {heading && <h1 class="text-2xl text-primary">{heading}</h1>}
       <slot />
     </main>
