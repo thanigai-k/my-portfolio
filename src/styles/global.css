@@ -30,4 +30,5 @@
 
 .prose {
   --tw-prose-body: var(--color-primary);
+  --tw-prose-headings: var(--color-primary);
 }
