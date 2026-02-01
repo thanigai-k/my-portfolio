@@ -12,4 +12,19 @@ import HeaderLink from "./HeaderLink.astro";
     <HeaderLink href="/projects"> Projects</HeaderLink>
     <HeaderLink href="/experiences">Experiences</HeaderLink>
   </nav>
+  <script is:inline define:vars={{ baseUrl: import.meta.env.BASE_URL }}>
+    function updateHeaderActiveState() {
+      const pathname = (window.location.pathname.replace(baseUrl, "") || "/").replace(/\/$/, "") || "/";
+      const segment = pathname.match(/[^/]+/g)?.[0];
+      const activeHref = pathname === "/" ? "/" : "/" + (segment ?? "");
+      document.querySelectorAll("[data-header-link]").forEach((link) => {
+        const href = (link.getAttribute("data-href") ?? "").trim();
+        const isActive = href === pathname || href === activeHref;
+        link.classList.toggle("text-primary", isActive);
+        link.classList.toggle("text-secondary", !isActive);
+      });
+    }
+    document.addEventListener("astro:page-load", updateHeaderActiveState);
+    updateHeaderActiveState();
+  </script>
 </header>

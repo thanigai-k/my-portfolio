@@ -12,6 +12,8 @@ const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
 
 <a
   href={href}
+  data-header-link
+  data-href={href}
   class={cn(
     "hover:text-primary py-1 no-underline",
     isActive ? "text-primary" : "text-secondary",
