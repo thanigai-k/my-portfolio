@@ -1,6 +1,8 @@
 ---
+import DefaultProse from "../components/DefaultProse.astro";
 import MainLayout from "../components/MainLayout.astro";
-import { Content } from "../content/projects.mdx";
+
+import { Content } from "../content/projects.md";
 ---
 
 <MainLayout
@@ -8,7 +10,7 @@ import { Content } from "../content/projects.mdx";
   description="A collection of my projects"
   heading="Projects"
 >
-  <div class="prose">
+  <DefaultProse>
     <Content />
-  </div>
+  </DefaultProse>
 </MainLayout>

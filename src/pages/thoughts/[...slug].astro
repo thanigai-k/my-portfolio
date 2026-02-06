@@ -1,8 +1,8 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
-import BlogPost from "../../layouts/BlogPost.astro";
 
 import MainLayout from "../../components/MainLayout.astro";
+import DefaultProse from "../../components/DefaultProse.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -19,7 +19,7 @@ const { Content } = await render(post);
 
 <MainLayout title={post.data.title} description={post.data.description}>
   <a href="/thoughts" class="text-sm mb-8 inline-block text-secondary">Back</a>
-  <div class="prose">
+  <DefaultProse>
     <Content />
-  </div>
+  </DefaultProse>
 </MainLayout>

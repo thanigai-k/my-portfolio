@@ -27,13 +27,6 @@
 }
 
 @theme {
-  /* --color-primary: var(--color-neutral-900);
-  --color-secondary: var(--color-neutral-500);
-
-  --color-canvas: var(--color-neutral-50); */
-
-  /* Dark Mode centric */
-
   --color-primary: var(--color-neutral-50);
   --color-secondary: var(--color-neutral-400);
 
@@ -43,4 +36,5 @@
 .prose {
   --tw-prose-body: var(--color-primary);
   --tw-prose-headings: var(--color-primary);
+  --tw-prose-links: var(--color-primary);
 }

@@ -3,13 +3,6 @@ title: "My Projects"
 description: "A collection of my projects"
 ---
 
-import SetmoreLogo from "../components/symbols/SetmoreLogo.astro";
-import SignmoreLogo from "../components/symbols/SignmoreLogo.astro";
-import YocoLogo from "../components/symbols/YocoLogo.astro";
-import AnywhereWorksLogo from "../components/symbols/AnywhereWorksLogo.astro";
-import AnswerConnectLogo from "../components/symbols/AnswerConnectLogo.astro";
-import AnywhereWorksDesignSystemLogo from "../components/symbols/AnywhereWorksDesignSystemLogo.astro";
-
 Over the years, I've had the privilege of collaborating with talented teams on diverse projects, from open-source libraries to large-scale applications.
 
 ## Earth Design System
@@ -22,10 +15,7 @@ sit amet consectetur adipisicing elit. Quisquam, quos.
 - Landing page improved with score of user engagement
 - Something here aso to click to view the case study
 
-<AnywhereWorksLogo
-  class="w-[180px] mb-4 fill-primary"
-  href="https://anywhereworks.com"
-/>
+## Earth Design System
 
 Earth is a design system for Full Creative. It's a collection of components, patterns, and guidelines that help us build consistent and accessible UIs. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
 
@@ -33,7 +23,7 @@ Earth is a design system for Full Creative. It's a collection of components, pat
 - Landing page improved with score of user engagement
 - Something here aso to click to view the case study
 
-<SetmoreLogo class="w-[120px] mb-4" href="https://setmore.com" />
+## Earth Design System
 
 Earth is a design system for Full Creative. It's a collection of components, patterns, and guidelines that help us build consistent and accessible UIs.
 
@@ -41,18 +31,16 @@ Earth is a design system for Full Creative. It's a collection of components, pat
 - Landing page improved with score of user engagement
 - Something here aso to click to view the case study
 
-<SignmoreLogo class="w-[120px] mb-4" href="https://signmore.com" />
+## Earth Design System
 
 Earth is a design system for Full Creative. It's a collection of components, patterns, and guidelines that help us build consistent and accessible UIs.
 
 - Landing page improved with score of user engagement
 - Landing page improved with score of user engagement
 
-<AnswerConnectLogo class="w-[160px] mb-4" href="https://answerconnect.com" />
+## Earth Design System
 
 Earth is a design system for Full Creative. It's a collection of components, patterns,
 and guidelines that help us build consistent and accessible UIs.
-
-<YocoLogo class="w-[70px] mb-4" href="https://yoco.com" />
 
 Earth is a design system for Full Creative. It's a collection of components, patterns, and guidelines that help us build consistent and accessible UIs.
