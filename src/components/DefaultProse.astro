@@ -1,3 +1,10 @@
-<div class="prose">
+---
+type Props = {
+  className?: string;
+};
+const { className } = Astro.props;
+---
+
+<div class={`prose ${className}`}>
   <slot />
 </div>
