@@ -10,7 +10,7 @@ import HeaderLink from "./HeaderLink.astro";
     class="flex flex-row md:gap-1 md:flex-col gap-2 justify-evenly md:sticky top-20"
   >
     <HeaderLink href="/">about</HeaderLink>
-    <HeaderLink href="/thoughts">Thoughts</HeaderLink>
+    <HeaderLink href="/blog">Thoughts</HeaderLink>
     <HeaderLink href="/projects"> Projects</HeaderLink>
     <HeaderLink href="/experiences">Experiences</HeaderLink>
   </nav>
@@ -19,7 +19,7 @@ import HeaderLink from "./HeaderLink.astro";
       const pathname =
         (window.location.pathname.replace(baseUrl, "") || "/").replace(
           /\/$/,
-          ""
+          "",
         ) || "/";
       const segment = pathname.match(/[^/]+/g)?.[0];
       const activeHref = pathname === "/" ? "/" : "/" + (segment ?? "");

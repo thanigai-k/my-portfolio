@@ -5,7 +5,7 @@
 @layer base {
   /* In your global CSS */
   html {
-    font-size: 18px; /* mobile - 1rem = 16px */
+    font-size: 17px; /* mobile - 1rem = 16px */
   }
 
   @media (min-width: 768px) {
