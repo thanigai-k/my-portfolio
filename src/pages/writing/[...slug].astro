@@ -1,0 +1,41 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import Base from '../../layouts/Base.astro'
+import { isPublished } from '../../lib/content'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', isPublished)
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
+}
+
+const { post } = Astro.props as { post: CollectionEntry<'writing'> }
+const { Content } = await render(post)
+const fmt = post.data.date.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+})
+---
+
+<Base title={post.data.title} description={post.data.summary}>
+  <a href="/writing" class="type-meta mt-16 md:mt-[76px] inline-block text-muted2 no-underline">&larr; writing</a>
+  <h1 class="type-h1Page mb-3.5 mt-3.5">{post.data.title}</h1>
+  <div class="type-meta mb-10 flex gap-4 text-muted2">
+    <span>{fmt}</span>
+    <span>{post.data.tag}</span>
+    {post.data.draft && <span>draft</span>}
+  </div>
+
+  {post.data.hero && (
+    <div
+      class="flex h-[260px] items-center justify-center overflow-hidden rounded-card bg-[repeating-linear-gradient(45deg,var(--panel)_0_10px,var(--bg)_10px_20px)] md:h-[440px]"
+    >
+      <Image src={post.data.hero} alt="" class="size-full object-cover" />
+    </div>
+  )}
+
+  <div class="prose mt-10">
+    <Content />
+  </div>
+</Base>

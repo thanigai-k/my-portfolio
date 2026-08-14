@@ -1,0 +1,11 @@
+<!-- Placeholder. Drop a real photo at public/avatar.jpg and point site.avatar at it. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 76" width="76" height="76" role="img" aria-label="Avatar placeholder">
+  <defs>
+    <pattern id="hatch" width="14" height="14" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="14" height="14" fill="#F5F3EE"/>
+      <rect width="7" height="14" fill="#EDEBE5"/>
+    </pattern>
+  </defs>
+  <rect width="76" height="76" fill="url(#hatch)"/>
+  <text x="38" y="42" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" fill="#9A968C">TK</text>
+</svg>

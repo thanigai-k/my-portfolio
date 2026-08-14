@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string
+  href?: string
+  cta?: string
+  class?: string
+}
+const { title, href, cta, class: cls = 'mt-[76px]' } = Astro.props
+---
+
+<div class={`flex items-baseline justify-between border-b border-rule2 pb-[11px] ${cls}`}>
+  <h2 class="type-label m-0 text-muted2">{title}</h2>
+  {
+    href && (
+      <a
+        href={href}
+        class="type-meta border-b border-transparent text-muted2 no-underline transition-colors duration-[var(--motion-fast)] hover:border-ink hover:text-ink"
+      >
+        {cta ?? 'all'} &rarr;
+      </a>
+    )
+  }
+</div>

@@ -1,0 +1,75 @@
+---
+import { nav } from '../site.config'
+
+interface Props {
+  current: string
+}
+const { current } = Astro.props
+const items = nav.filter((n) => n.rail)
+---
+
+<aside
+  class="pointer-events-none absolute inset-y-[38px] left-5 hidden w-[var(--layout-railWidth)] lg:block"
+  aria-label="Primary"
+>
+  <nav class="pointer-events-auto sticky top-6" data-rail>
+    <div class="relative pl-[19px]">
+      <span
+        class="absolute left-0 top-[3px] size-[7px] bg-ink transition-transform duration-[var(--motion-base)] ease-[var(--motion-ease)]"
+        data-rail-marker
+      ></span>
+      <span
+        class="type-nav absolute left-0 top-0 text-muted opacity-0 transition-[transform,opacity] duration-[var(--motion-base)] ease-[var(--motion-ease)]"
+        data-rail-arrow
+        aria-hidden="true">&rarr;</span
+      >
+      <ul class="m-0 flex list-none flex-col items-start gap-[14px] p-0 leading-none">
+        {
+          items.map((item, i) => (
+            <li class="leading-none">
+              <a
+                href={item.href}
+                data-rail-link
+                data-index={i}
+                aria-current={current === item.href ? 'page' : undefined}
+                class="type-nav block text-muted2 no-underline transition-colors duration-[var(--motion-fast)] hover:text-ink aria-[current=page]:text-ink"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </nav>
+</aside>
+
+<script>
+  // The mockup's marker: a square parked on the active link, sliding to whatever
+  // you hover, with an arrow that fades in alongside it.
+  // Positions are measured, not computed, so changing the type scale or the gap
+  // in theme.config.ts can't desync the marker.
+  document.querySelectorAll<HTMLElement>('[data-rail]').forEach((rail) => {
+    const marker = rail.querySelector<HTMLElement>('[data-rail-marker]')!
+    const arrow = rail.querySelector<HTMLElement>('[data-rail-arrow]')!
+    const links = [...rail.querySelectorAll<HTMLAnchorElement>('[data-rail-link]')]
+    const active = Math.max(
+      0,
+      links.findIndex((l) => l.getAttribute('aria-current') === 'page'),
+    )
+
+    const move = (i: number, hovering: boolean) => {
+      const link = links[i]
+      if (!link) return
+      const y = link.offsetTop
+      marker.style.transform = `translateY(${y}px)`
+      marker.style.opacity = hovering ? '0' : '1'
+      arrow.style.transform = `translateY(${y}px)`
+      arrow.style.opacity = hovering ? '1' : '0'
+    }
+
+    move(active, false)
+    links.forEach((link, i) => link.addEventListener('mouseenter', () => move(i, true)))
+    rail.addEventListener('mouseleave', () => move(active, false))
+  })
+</script>

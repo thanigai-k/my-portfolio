@@ -1,0 +1,74 @@
+---
+import '../styles/global.css'
+import { googleFontsHref, noFlashScript, themeCss } from '../lib/theme'
+import { theme } from '../theme.config'
+import { site } from '../site.config'
+import SideRail from '../components/SideRail.astro'
+import MobileTabBar from '../components/MobileTabBar.tsx'
+import ThemeToggle from '../components/ThemeToggle.tsx'
+import OverridePill from '../components/OverridePill.tsx'
+
+interface Props {
+  title?: string
+  description?: string
+  /** `wide` for hero/case-study pages (820px), `read` for everything else. */
+  measure?: 'read' | 'wide'
+}
+const { title, description = site.description, measure = 'read' } = Astro.props
+const current = Astro.url.pathname.replace(/(.)\/$/, '$1')
+const column = measure === 'wide' ? 'var(--layout-wideColumn)' : 'var(--layout-readColumn)'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ? `${title} — ${site.name}` : site.title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(current, site.url)} />
+    <meta property="og:title" content={title ?? site.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={googleFontsHref(theme.fonts)} id="google-fonts" />
+    <style is:global set:html={themeCss(theme)}></style>
+    <script is:inline set:html={noFlashScript}></script>
+  </head>
+
+  <body>
+    <a
+      href="#main"
+      class="type-meta sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-panel focus:px-3 focus:py-2"
+      >Skip to content</a
+    >
+
+    <!-- flow-root: stops the first child's top margin collapsing out and
+         dragging the absolutely-positioned rail down with it. -->
+    <div class="relative flow-root pb-[72px]">
+      <SideRail current={current} />
+
+      <div
+        class="absolute right-[var(--layout-pagePadding)] top-6 z-30 flex items-center gap-1 lg:top-9"
+      >
+        <a
+          href="/design"
+          class="type-meta rounded-control px-2 py-1.5 text-muted2 no-underline transition-colors duration-[var(--motion-fast)] hover:text-ink"
+          >design</a
+        >
+        <ThemeToggle client:load />
+      </div>
+
+      <main
+        id="main"
+        class="mx-auto px-[var(--layout-pagePadding)] pb-32 lg:pb-0 max-w-5xl"
+      >
+        <slot />
+      </main>
+    </div>
+
+    <MobileTabBar current={current} client:load />
+    <OverridePill client:idle />
+  </body>
+</html>

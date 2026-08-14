@@ -1,41 +1,149 @@
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-@import "tw-shimmer";
+@import 'tailwindcss';
+
+/* Tailwind utilities aliased onto the tokens emitted from src/theme.config.ts.
+   Nothing here holds a value — it only names them. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-ink2: var(--ink2);
+  --color-muted: var(--muted);
+  --color-muted2: var(--muted2);
+  --color-rule: var(--rule);
+  --color-rule2: var(--rule2);
+  --color-panel: var(--panel);
+
+  --font-heading: var(--ff-heading);
+  --font-body: var(--ff-body);
+  --font-meta: var(--ff-meta);
+
+  --radius-card: var(--r-card);
+  --radius-sheet: var(--r-sheet);
+  --radius-control: var(--r-control);
+}
 
 @layer base {
-  /* In your global CSS */
   html {
-    font-size: 16px; /* mobile - 1rem = 16px */
+    -webkit-text-size-adjust: 100%;
   }
-
-  @media (min-width: 768px) {
-    html {
-      font-size: 14px; /* tablet - 1rem = 18px */
-    }
-  }
-
   body {
-    font-family: "IBM Plex Sans", sans-serif;
-    /* font-family: "Inter", sans-serif; */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--ff-body);
+    font-size: var(--t-body-size);
+    line-height: var(--t-body-line);
+    font-weight: var(--t-body-weight);
+    transition: background var(--motion-fast), color var(--motion-fast);
   }
-
   a {
-    text-decoration: underline;
+    color: inherit;
+  }
+  code {
+    font-family: var(--ff-meta);
+    font-size: 0.9em;
+    background: var(--panel);
+    border-radius: 3px;
+    padding: 0.15em 0.4em;
+    margin-inline: 0.15em;
+  }
+  ::selection {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
   }
 }
 
-@theme {
-  --color-primary: var(--color-neutral-50);
-  --color-secondary: var(--color-neutral-400);
-
-  --color-canvas: var(--color-neutral-900);
+/* Prose rendered from .mdoc — inherits the same tokens. */
+.prose > * + * {
+  margin-top: 1.1em;
+}
+.prose p,
+.prose li {
+  font-family: var(--t-prose-font);
+  font-size: var(--t-prose-size);
+  line-height: var(--t-prose-line);
+  font-weight: var(--t-prose-weight);
+  color: var(--ink2);
+}
+.prose h2 {
+  font-family: var(--t-label-font);
+  font-size: var(--t-label-size);
+  font-weight: var(--t-label-weight);
+  letter-spacing: var(--t-label-track);
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-top: 2.6em;
+  margin-bottom: 0.6em;
+}
+.prose h3 {
+  font-family: var(--t-h3-font);
+  font-size: var(--t-h3-size);
+  line-height: var(--t-h3-line);
+  font-weight: var(--t-h3-weight);
+  color: var(--ink);
+}
+.prose ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+}
+/* Hanging em-dash marker, as in the mockup — wrapped lines align with the
+   text, not under the dash. Positioned rather than flexed, so inline <strong>
+   and <a> stay in the text flow. */
+.prose li {
+  position: relative;
+  padding-left: 1.45em;
+}
+.prose li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--muted2);
 }
 
-.prose {
-  --tw-prose-body: var(--color-primary);
-  --tw-prose-headings: var(--color-primary);
-  --tw-prose-links: var(--color-primary);
-  --tw-prose-bold: var(--color-primary);
+/* Denser variant for bullets nested inside a row (experience accordion,
+   project cards) — body scale instead of prose scale. */
+.prose-tight p,
+.prose-tight li {
+  font-size: var(--t-body-size);
+  line-height: var(--t-body-line);
+  font-weight: var(--t-body-weight);
+}
+.prose-tight > * + * {
+  margin-top: 0.8em;
+}
+.prose-tight ul {
+  gap: 7px;
+}
+/* Secondary prose — for body that sits under a lead paragraph. */
+.prose-muted p,
+.prose-muted li {
+  color: var(--muted);
+}
+.prose strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+}
+.prose img {
+  max-width: 100%;
+  border-radius: var(--r-card);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

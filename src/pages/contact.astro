@@ -1,0 +1,15 @@
+---
+import { getEntry, render } from 'astro:content'
+import Base from '../layouts/Base.astro'
+
+const page = await getEntry('pages', 'contact')!
+const { Content } = await render(page)
+---
+
+<Base title={page.data.title} description={page.data.tagline}>
+  <h1 class="type-h1Page mb-2 mt-16 md:mt-[76px]">{page.data.title}</h1>
+  {page.data.tagline && <p class="type-lead mb-11 mt-0 text-muted">{page.data.tagline}</p>}
+  <div class="prose">
+    <Content />
+  </div>
+</Base>

@@ -2,6 +2,9 @@
   "name": "my-portfolio",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -9,23 +12,19 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.7.0",
-    "@fontsource/ibm-plex-sans": "^5.2.8",
-    "@fontsource/inter": "^5.2.8",
-    "@fontsource/nunito-sans": "^5.2.7",
-    "@fontsource/roboto": "^5.2.9",
-    "@fontsource/sora": "^5.2.8",
-    "@tailwindcss/vite": "^4.1.18",
-    "astro": "^5.17.1",
-    "clsx": "^2.1.1",
-    "sharp": "^0.34.3",
-    "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.18",
-    "tw-shimmer": "^0.4.4"
+    "@astrojs/markdoc": "^2.0.6",
+    "@astrojs/react": "^6.0.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "astro": "^7.2.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.19"
+    "@astrojs/check": "^0.9.10",
+    "playwright": "^1.62.1",
+    "typescript": "^6.0.3"
   }
 }

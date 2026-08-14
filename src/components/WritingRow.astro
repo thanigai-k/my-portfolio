@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string
+  href: string
+  tag: string
+  date: Date
+}
+const { title, href, tag, date } = Astro.props
+const formatted = date.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+})
+---
+
+<a
+  href={href}
+  class="group flex items-baseline gap-4 border-b border-rule py-[18px] no-underline"
+>
+  <span
+    class="type-listTitle flex-1 transition-colors duration-[var(--motion-fast)] group-hover:text-muted"
+    >{title}</span
+  >
+  <span class="type-meta hidden text-muted2 sm:inline">{tag}</span>
+  <span class="type-meta w-[106px] text-right text-muted2">{formatted}</span>
+</a>

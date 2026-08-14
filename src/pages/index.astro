@@ -1,16 +1,69 @@
 ---
-import MainLayout from "../components/MainLayout.astro";
-import DefaultProse from "../components/DefaultProse.astro";
+import { getCollection, getEntry, render } from 'astro:content'
+import { Image } from 'astro:assets'
+import Base from '../layouts/Base.astro'
+import SectionHeader from '../components/SectionHeader.astro'
+import WritingRow from '../components/WritingRow.astro'
+import ExperienceList from '../components/ExperienceList.astro'
+import { socials } from '../site.config'
+import { isPublished } from '../lib/content'
+import avatar from '../assets/my-avatar.jpeg'
 
-import { Content } from "../content/home.md";
+const home = await getEntry('pages', 'home')!
+const { Content } = await render(home)
+
+const posts = (await getCollection('writing', isPublished))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3)
+
+const experiences = (await getCollection('experiences')).sort(
+  (a, b) => a.data.order - b.data.order,
+)
 ---
 
-<MainLayout
-  title="Who is Thanigaivel? | Thanigaivel"
-  description="Senior Frontend Engineer focused on design systems, accessibility, and developer experience."
-  heading="Thanigai"
->
-  <DefaultProse className="prose-headings:font-normal">
+<Base description={home.data.tagline}>
+  <Image
+    src={avatar}
+    alt=""
+    width={76}
+    height={76}
+    class="mb-5 mt-16 size-[var(--layout-avatar)] rounded-full bg-panel object-cover md:mb-[34px] md:mt-24"
+  />
+
+  <h1 class="type-h1 m-0 mb-3 md:mb-[26px]">{home.data.title}</h1>
+
+  <div class="prose">
     <Content />
-  </DefaultProse>
-</MainLayout>
+  </div>
+
+  {
+    posts.length > 0 && (
+      <>
+        <SectionHeader title="Writing" href="/writing" cta="all writing" />
+        <div class="flex flex-col">
+          {posts.map((post) => (
+            <WritingRow
+              title={post.data.title}
+              href={`/writing/${post.id}`}
+              tag={post.data.tag}
+              date={post.data.date}
+            />
+          ))}
+        </div>
+      </>
+    )
+  }
+
+  <SectionHeader title="Experience" href="/experiences" cta="full history" class="mt-[72px]" />
+  <ExperienceList entries={experiences.slice(0, 3)} />
+
+  <div class="type-meta mt-16 flex flex-wrap gap-5 text-muted2">
+    {
+      socials.map((s) => (
+        <a href={s.href} class="no-underline transition-colors hover:text-ink">
+          {s.label}
+        </a>
+      ))
+    }
+  </div>
+</Base>

@@ -1,16 +1,37 @@
 ---
-import DefaultProse from "../components/DefaultProse.astro";
-import MainLayout from "../components/MainLayout.astro";
+import { getCollection, render } from 'astro:content'
+import Base from '../layouts/Base.astro'
 
-import { Content } from "../content/projects.md";
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order)
+const rendered = await Promise.all(
+  projects.map(async (p) => ({ data: p.data, Content: (await render(p)).Content })),
+)
 ---
 
-<MainLayout
-  title="My Projects | Thanigaivel"
-  description="A collection of my projects"
-  heading="Projects"
->
-  <DefaultProse>
-    <Content />
-  </DefaultProse>
-</MainLayout>
+<Base title="Side projects" description="Things built on the side and at work.">
+  <h1 class="type-h1Page mb-2 mt-16 md:mt-[76px]">Side projects</h1>
+  <p class="type-lead mb-11 mt-0 text-muted">Systems, tools, and the odd starter kit.</p>
+
+  {
+    rendered.map(({ data, Content }) => (
+      <article class="border-b border-rule py-[26px]">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="type-h3 m-0">
+            {data.href ? (
+              <a href={data.href} class="underline underline-offset-4">
+                {data.title}
+              </a>
+            ) : (
+              data.title
+            )}
+          </h2>
+        </div>
+        <p class="type-lead mb-3 mt-2.5 text-ink2">{data.summary}</p>
+        <div class="prose prose-tight prose-muted">
+          <Content />
+        </div>
+        {data.stack && <div class="type-meta mt-3 text-muted2">{data.stack}</div>}
+      </article>
+    ))
+  }
+</Base>

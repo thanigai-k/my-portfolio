@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro'
+import ThemeLab from '../components/ThemeLab.tsx'
+import { Image } from 'astro:assets'
+import avatar from '../assets/my-avatar.jpeg'
+---
+
+<Base title="Design" description="Live token editor." measure="wide">
+  <h1 class="type-h1Page mb-2 mt-16 md:mt-[76px]">Design</h1>
+  <p class="type-lead mb-11 mt-0 max-w-[560px] text-muted">
+    Every control here writes a CSS variable, so the whole site updates as you drag — this page
+    included. When you like what you see, hit <em>copy config</em> and paste it over the
+    <code class="type-meta">theme</code> object in <code class="type-meta">src/theme.config.ts</code>.
+  </p>
+
+  <div class="grid gap-14 lg:grid-cols-[minmax(0,380px)_1fr]">
+    <ThemeLab client:load />
+
+    <div class="lg:sticky lg:top-8 lg:self-start">
+      <h2 class="type-label mb-4 border-b border-rule2 pb-2.5 text-muted2">Specimen</h2>
+
+      <Image
+        src={avatar}
+        alt=""
+        class="mb-6 size-[var(--layout-avatar)] rounded-full bg-panel object-cover"
+      />
+      <h3 class="type-h1 m-0 mb-5">Designer &amp; Tinkerer</h3>
+      <p class="type-prose m-0 mb-4 text-ink2">
+        Senior Frontend Engineer who cares deeply about how systems feel. This paragraph uses the
+        <em>prose</em> token; the heading above uses <em>h1</em>.
+      </p>
+
+      <div class="mt-10 flex items-baseline justify-between border-b border-rule2 pb-2.5">
+        <span class="type-label text-muted2">Writing</span>
+        <span class="type-meta text-muted2">all writing &rarr;</span>
+      </div>
+      {
+        ['The next chapter', 'The UX of a good dropdown'].map((t) => (
+          <div class="flex items-baseline gap-4 border-b border-rule py-[18px]">
+            <span class="type-listTitle flex-1">{t}</span>
+            <span class="type-meta text-muted2">August 7, 2026</span>
+          </div>
+        ))
+      }
+
+      <div class="mt-10 flex flex-wrap gap-2">
+        {
+          ['bg', 'panel', 'ink', 'ink2', 'muted', 'muted2'].map((c) => (
+            <div class="flex items-center gap-2 rounded-control border border-rule px-2.5 py-1.5">
+              <span
+                class="size-4 rounded-full border border-rule2"
+                style={`background:var(--${c})`}
+              />
+              <span class="type-meta text-muted2">{c}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Base>

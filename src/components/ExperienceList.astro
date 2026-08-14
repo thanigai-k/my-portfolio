@@ -1,0 +1,80 @@
+---
+import { render, type CollectionEntry } from 'astro:content'
+
+interface Props {
+  entries: CollectionEntry<'experiences'>[]
+  /** How many rows start expanded. */
+  openCount?: number
+}
+const { entries, openCount = 1 } = Astro.props
+
+const rendered = await Promise.all(
+  entries.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+)
+---
+
+<div data-accordion>
+  {
+    rendered.map(({ entry, Content }, i) => (
+      <div class="border-b border-rule py-[18px]">
+        <button
+          type="button"
+          data-acc-trigger
+          aria-expanded={i < openCount}
+          aria-controls={`exp-${entry.id}`}
+          class="group flex w-full items-baseline gap-3 text-left"
+        >
+          <span
+            class="type-meta inline-block text-muted2 transition-transform duration-[var(--motion-fast)]"
+            style={i < openCount ? 'transform:rotate(90deg)' : undefined}
+            data-acc-caret
+            aria-hidden="true"
+          >
+            &#9656;
+          </span>
+          <span class="type-listTitle flex-1 text-ink2 transition-colors duration-[var(--motion-fast)] group-hover:text-muted">
+            {entry.data.role}
+          </span>
+          <span class="type-meta shrink-0 text-muted2">{entry.data.period}</span>
+        </button>
+
+        <div
+          id={`exp-${entry.id}`}
+          data-acc-panel
+          class="grid transition-[grid-template-rows,opacity] duration-[var(--motion-base)] ease-[var(--motion-ease)]"
+          style={`grid-template-rows:${i < openCount ? '1fr' : '0fr'};opacity:${i < openCount ? 1 : 0}`}
+        >
+          <div class="overflow-hidden">
+            <div class="pl-[23px] pt-2">
+              <div class="type-meta mb-2 text-muted">{entry.data.company}</div>
+              <div class="prose prose-tight">
+                <Content />
+              </div>
+              {entry.data.stack && (
+                <div class="type-meta mt-2.5 leading-relaxed text-muted2">{entry.data.stack}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-accordion]').forEach((root) => {
+    root.querySelectorAll<HTMLButtonElement>('[data-acc-trigger]').forEach((trigger) => {
+      const panel = root.querySelector<HTMLElement>(`#${CSS.escape(trigger.getAttribute('aria-controls')!)}`)
+      const caret = trigger.querySelector<HTMLElement>('[data-acc-caret]')
+      trigger.addEventListener('click', () => {
+        const open = trigger.getAttribute('aria-expanded') !== 'true'
+        trigger.setAttribute('aria-expanded', String(open))
+        caret?.style.setProperty('transform', open ? 'rotate(90deg)' : 'none')
+        if (panel) {
+          panel.style.gridTemplateRows = open ? '1fr' : '0fr'
+          panel.style.opacity = open ? '1' : '0'
+        }
+      })
+    })
+  })
+</script>
