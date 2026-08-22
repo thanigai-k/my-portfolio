@@ -135,8 +135,44 @@
   text-decoration-thickness: 0.5px;
 }
 .prose img {
+  display: block;
+  width: auto;
   max-width: 100%;
+  height: auto;
+  margin-inline: auto;
   border-radius: var(--r-card);
+}
+
+/* ── Figures ──────────────────────────────────────────────────────────────
+   Case-study images and video break OUT of the 640px reading column and sit
+   centred on it, with real air above and below (--figure-space) instead of
+   the 1.1em that separates paragraphs. Under 1200px there is nothing to
+   break out into, so they just fill the column. */
+.figure-wide {
+  --figure-width: 100%;
+  width: var(--figure-width);
+  margin-left: calc(50% - var(--figure-width) / 2);
+}
+@media (min-width: 1200px) {
+  .figure-wide {
+    --figure-width: min(1200px, calc(100vw - 2 * var(--layout-pagePadding)));
+  }
+}
+
+.prose {
+  --figure-space: 4rem;
+}
+/* Markdoc renders a lone `![alt](path)` as <p><img></p>. */
+.prose p:has(> img:only-child) {
+  width: var(--figure-width, 100%);
+  margin-left: calc(50% - var(--figure-width, 100%) / 2);
+  margin-top: var(--figure-space);
+  margin-bottom: var(--figure-space);
+}
+@media (min-width: 1200px) {
+  .prose p:has(> img:only-child) {
+    --figure-width: min(1200px, calc(100vw - 2 * var(--layout-pagePadding)));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

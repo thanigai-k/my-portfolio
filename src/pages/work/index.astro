@@ -1,34 +1,68 @@
 ---
-import { getCollection } from 'astro:content'
-import { Image } from 'astro:assets'
-import Base from '../../layouts/Base.astro'
-import { isPublished } from '../../lib/content'
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import { isPublished } from "../../lib/content";
 
-const studies = (await getCollection('work', isPublished)).sort(
-  (a, b) => a.data.order - b.data.order,
-)
+const studies = (await getCollection("work", isPublished)).sort(
+    (a, b) => a.data.order - b.data.order,
+);
 ---
 
 <Base title="Work" description="Case studies." measure="wide">
-  <h1 class="type-h1Page mb-2 mt-16 md:mt-[84px]">Work</h1>
-  <p class="type-lead mb-14 mt-0 text-muted">Case studies from design systems and platform work.</p>
+    <h1 class="type-h1Page mb-2 mt-16 md:mt-[84px]">Work</h1>
+    <p class="type-lead mb-14 mt-0 text-muted">
+        Case studies from design systems and platform work.
+    </p>
 
-  {studies.length === 0 && <p class="type-body text-muted">Nothing published yet.</p>}
+    {
+        studies.length === 0 && (
+            <p class="type-body text-muted">Nothing published yet.</p>
+        )
+    }
 
-  {
-    studies.map((study) => (
-      <article class="mb-[68px]">
-        <div class="flex h-[240px] items-center justify-center overflow-hidden rounded-card bg-[repeating-linear-gradient(45deg,var(--panel)_0_10px,var(--bg)_10px_20px)] md:h-[400px]">
-          {study.data.hero && (
-            <Image src={study.data.hero} alt="" class="size-full object-cover" loading="lazy" />
-          )}
-        </div>
-        <h2 class="type-h2 mb-2 mt-[26px]">{study.data.title}</h2>
-        <p class="type-lead m-0 mb-3.5 max-w-[620px] text-ink2">{study.data.summary}</p>
-        <a href={`/work/${study.id}`} class="type-meta underline underline-offset-4">
-          Read the case study &rarr;
-        </a>
-      </article>
-    ))
-  }
+    {
+        studies.map((study) => (
+            <article class="mb-[68px]">
+                <div
+                    class:list={[
+                        "flex items-center justify-center overflow-hidden rounded-card bg-[repeating-linear-gradient(45deg,var(--panel)_0_10px,var(--bg)_10px_20px)]",
+                        !study.data.heroVideo && "h-[240px] md:h-[400px]",
+                    ]}
+                >
+                    {study.data.heroVideo ? (
+                        <video
+                            src={study.data.heroVideo}
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            preload="metadata"
+                            style={`object-position:${study.data.heroVideoObjectPosition ?? "top"}`}
+                            class="block w-full aspect-video object-cover"
+                        />
+                    ) : (
+                        study.data.hero && (
+                            <Image
+                                src={study.data.hero}
+                                alt=""
+                                class="size-full object-cover"
+                                loading="lazy"
+                            />
+                        )
+                    )}
+                </div>
+                <h2 class="type-h2 mb-2 mt-[26px]">{study.data.title}</h2>
+                <p class="type-lead m-0 mb-3.5 max-w-[620px] text-ink2">
+                    {study.data.summary}
+                </p>
+                <a
+                    href={`/work/${study.id}`}
+                    class="type-meta underline underline-offset-4"
+                >
+                    Read the case study &rarr;
+                </a>
+            </article>
+        ))
+    }
 </Base>

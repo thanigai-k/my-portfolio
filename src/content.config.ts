@@ -31,6 +31,12 @@ const work = defineCollection({
       title: z.string(),
       summary: z.string(),
       hero: mdImage(image).optional(),
+      /** Path under public/, e.g. /eds-showreel.mp4. Plays in place of the hero image. */
+      heroVideo: z.string().optional(),
+      /** `W / H` of heroVideo — reserves the box before metadata loads, so the page never jumps. */
+      heroVideoAspect: z.string().optional(),
+      /** CSS `object-position` for heroVideo (e.g. `center`, `top`). Defaults to `top`. */
+      heroVideoObjectPosition: z.string().optional(),
       order: z.number().default(99),
       stack: z.string().optional(),
       draft: z.boolean().default(false),

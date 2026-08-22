@@ -1,11 +1,15 @@
 ---
-import { Image } from 'astro:assets'
+import { Image } from "astro:assets";
 
 interface Props {
-  src: ImageMetadata
-  alt?: string
+    src: ImageMetadata;
+    alt?: string;
 }
-const { src, alt = '' } = Astro.props
+const { src, alt = "" } = Astro.props;
 ---
 
-<Image src={src} alt={alt} class="my-8 rounded-card" />
+<Image
+    src={src}
+    alt={alt}
+    class="rounded-card aspect-video object-cover object-center"
+/>
