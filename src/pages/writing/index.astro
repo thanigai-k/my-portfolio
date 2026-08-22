@@ -1,48 +1,65 @@
 ---
-import { getCollection } from 'astro:content'
-import { Image } from 'astro:assets'
-import Base from '../../layouts/Base.astro'
-import { isPublished } from '../../lib/content'
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import { isPublished } from "../../lib/content";
 
-const posts = (await getCollection('writing', isPublished)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-)
+const posts = (await getCollection("writing", isPublished)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    d.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+    });
 ---
 
 <Base title="Writing" description="Notes on the work, in no particular order.">
-  <h1 class="type-h1Page mb-2 mt-16 md:mt-[76px]">Writing</h1>
-  <p class="type-lead mb-11 mt-0 text-muted">Notes on the work, in no particular order.</p>
+    <h1 class="type-h1Page mb-2 mt-16 md:mt-[76px]">Writing</h1>
+    <p class="type-lead mb-11 mt-0 text-muted">
+        Notes on the work, in no particular order.
+    </p>
 
-  {posts.length === 0 && <p class="type-body text-muted">Nothing published yet.</p>}
+    {
+        posts.length === 0 && (
+            <p class="type-body text-muted">Nothing published yet.</p>
+        )
+    }
 
-  {
-    posts.map((post) => (
-      <article class="border-b border-rule py-[26px]">
-        <div class="flex items-baseline justify-between gap-4">
-          <div class="flex items-baseline gap-3">
-            {post.data.hero && (
-              <Image
-                src={post.data.hero}
-                alt=""
-                class="size-16 shrink-0 self-center rounded-card object-cover"
-              />
-            )}
-            <h2 class="type-h3 m-0">
-              <a href={`/writing/${post.id}`} class="no-underline">
-                {post.data.title}
-              </a>
-            </h2>
-          </div>
-          <span class="type-meta shrink-0 text-muted2">{fmt(post.data.date)}</span>
-        </div>
-        <div class="type-meta my-2.5 text-muted2">
-          {post.data.tag}
-          {post.data.draft && ' · draft'}
-        </div>
-        <p class="type-body m-0 text-ink2">{post.data.summary}</p>
-      </article>
-    ))
-  }
+    {
+        posts.map((post) => (
+            <article class="border-b border-rule py-[26px]">
+                <div class="flex items-baseline justify-between gap-4">
+                    <div class="flex items-baseline gap-3">
+                        {post.data.hero && (
+                            <Image
+                                src={post.data.hero}
+                                alt=""
+                                class="size-16 shrink-0 self-center rounded-card object-cover"
+                            />
+                        )}
+                        <h2 class="type-h3 m-0">
+                            <a
+                                href={`/writing/${post.id}`}
+                                class="no-underline"
+                            >
+                                {post.data.title}
+                            </a>
+                        </h2>
+                    </div>
+                    <span class="type-meta shrink-0 text-muted2">
+                        {fmt(post.data.date)}
+                    </span>
+                </div>
+                <div class="type-meta my-2.5 text-muted2">
+                    {post.data.tag}
+                    {post.data.draft && (
+                        <span class="text-orange-400"> · draft</span>
+                    )}
+                </div>
+                <p class="type-body m-0 text-ink2">{post.data.summary}</p>
+            </article>
+        ))
+    }
 </Base>
