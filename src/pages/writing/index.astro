@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import Base from '../../layouts/Base.astro'
 import SparkLink from '../../components/SparkLink.astro'
+import Sparkle from '../../components/Sparkle.astro'
 import { site } from '../../site.config'
 import { isPublished, monthYear, readMinutes } from '../../lib/content'
 
@@ -55,9 +56,9 @@ const plural = (n: number) => `${n} post${n === 1 ? '' : 's'}`
             <a
               href={`/writing/${post.id}`}
               data-topic={post.data.topic}
-              class="flex flex-col gap-1 no-underline max-md:gap-1.5 max-md:border-t max-md:border-line max-md:py-3.5"
+              class="group/spk flex flex-col gap-1 no-underline max-md:gap-1.5 max-md:border-t max-md:border-line max-md:py-3.5"
             >
-              <span class="font-semibold underline decoration-edge underline-offset-3 max-md:text-lg/[1.35]">{post.data.title}</span>
+              <span class="relative transition-colors duration-150 md:group-hover/spk:text-white md:group-hover/spk:decoration-accent md:group-focus-visible/spk:text-white md:group-focus-visible/spk:decoration-accent self-start font-semibold underline decoration-edge underline-offset-3 max-md:text-lg/[1.35]"><Sparkle />{post.data.title}</span>
               <span class="text-sm text-muted max-md:text-[15px]">{post.data.summary}</span>
               <span class="meta text-muted">
                 {post.data.topic} · {readMinutes(post.body)} min · {monthYear(post.data.date)}
