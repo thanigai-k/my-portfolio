@@ -13,13 +13,12 @@ interface Link {
 interface Props {
   title: string
   summary: string
-  /** Mono caps line above the title, e.g. "Design systems · Case study". */
+  /** Mono caps line above the title, e.g. "Notes · 4 min · Sep 2026". */
   kicker: string
   crumb: Link
   section: Section
-  /** Hero slot, first match wins: video → image → TL;DR → nothing (docs/adr/0003). */
+  /** Hero slot, first match wins: image → TL;DR → nothing (docs/adr/0003). */
   hero: {
-    video?: { src: string; aspect?: string; position?: string }
     image?: ImageMetadata
     tldr?: string[]
   }
@@ -54,19 +53,7 @@ const crumbLink = 'text-muted no-underline'
       <p class="text-[1.18em]/normal text-ink-soft">{summary}</p>
     </header>
 
-    {hero.video ? (
-      <video
-        src={hero.video.src}
-        autoplay
-        loop
-        muted
-        playsinline
-        controls
-        preload="metadata"
-        style={`aspect-ratio: ${hero.video.aspect ?? '16 / 9'}; object-position: ${hero.video.position ?? 'top'}`}
-        class="mt-2 block w-full rounded-md bg-surface object-cover"
-      />
-    ) : hero.image ? (
+    {hero.image ? (
       <Image
         src={hero.image}
         alt=""

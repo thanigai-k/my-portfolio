@@ -1,18 +1,20 @@
 ---
 import SparkLink from './SparkLink.astro'
+import { roleVerb } from '../lib/content'
 
 interface Props {
   name: string
+  role: keyof typeof roleVerb
   tagline: string
   summary: string
   href: string
 }
-const { name, tagline, summary, href } = Astro.props
+const { name, role, tagline, summary, href } = Astro.props
 const cardId = `card-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
 ---
 
 <!-- Phones: the whole row is the tap target (the link's ::after covers it). -->
-<div class="relative max-md:border-t max-md:border-line max-md:py-3">
+<div data-role={role} class="relative max-md:border-t max-md:border-line max-md:py-3">
   <span class="md:inline-block">
     <SparkLink
       href={href}
@@ -24,11 +26,12 @@ const cardId = `card-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
     <!-- Card content: the link's description, and what the shared hover card in index.astro shows (docs/adr/0005). -->
     <span id={cardId} hidden>
       <span class="font-bold">{name}</span>
+      <span class="font-mono text-[13px] text-accent capitalize">{role}</span>
       <span class="text-sm/normal text-ink-soft">{summary}</span>
     </span>
   </span>
   <span class="text-muted max-md:mt-0.5 max-md:block max-md:text-[15px]">
     <span class="max-md:hidden"> - </span>
-    {tagline}
+    <span class="text-ink">{roleVerb[role]}</span> {tagline}
   </span>
 </div>

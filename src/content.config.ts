@@ -24,29 +24,21 @@ const writing = defineCollection({
     }),
 })
 
-const work = defineCollection({
-  loader: mdoc('work'),
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      /** Short one-liner on Home: "Name - tagline". */
-      tagline: z.string(),
-      /** Two-line description: post summary and project hover card. */
-      summary: z.string(),
-      /** Kicker on the case study page: "<topic> · Case study". */
-      topic: z.string().optional(),
-      hero: mdImage(image).optional(),
-      tldr: z.array(z.string()).max(3).optional(),
-      /** Path under public/, e.g. /eds-showreel.mp4. Plays in place of the hero image. */
-      heroVideo: z.string().optional(),
-      /** `W / H` of heroVideo — reserves the box before metadata loads, so the page never jumps. */
-      heroVideoAspect: z.string().optional(),
-      /** CSS `object-position` for heroVideo (e.g. `center`, `top`). Defaults to `top`. */
-      heroVideoObjectPosition: z.string().optional(),
-      order: z.number().default(99),
-      stack: z.string().optional(),
-      draft: z.boolean().default(false),
-    }),
+const projects = defineCollection({
+  loader: mdoc('projects'),
+  schema: z.object({
+    title: z.string(),
+    /** Drives the Home filter, the hover card, and the verb before the tagline (`roleVerb`). */
+    role: z.enum(['founder', 'lead', 'contributor']),
+    /** Short one-liner on Home: "Name - Verb tagline". Starts lowercase; it follows the verb. */
+    tagline: z.string(),
+    /** Two-line description in the project hover card. */
+    summary: z.string(),
+    order: z.number().default(99),
+    /** Where the row links: the project's site or GitHub repo. No page is built. */
+    href: z.string().url(),
+    draft: z.boolean().default(false),
+  }),
 })
 
 const experiences = defineCollection({
@@ -62,18 +54,6 @@ const experiences = defineCollection({
   }),
 })
 
-const projects = defineCollection({
-  loader: mdoc('projects'),
-  schema: z.object({
-    title: z.string(),
-    tagline: z.string(),
-    summary: z.string(),
-    order: z.number(),
-    stack: z.string().optional(),
-    href: z.string().optional(),
-  }),
-})
-
 const pages = defineCollection({
   loader: mdoc('pages'),
   schema: z.object({
@@ -82,4 +62,4 @@ const pages = defineCollection({
   }),
 })
 
-export const collections = { writing, work, experiences, projects, pages }
+export const collections = { writing, projects, experiences, pages }

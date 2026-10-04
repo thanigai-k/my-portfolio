@@ -9,3 +9,6 @@ export const readMinutes = (body = '') =>
 /** "Sep 2026" */
 export const monthYear = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+
+/** Project roles in filter order, and the verb that opens the row's tagline. */
+export const roleVerb = { founder: 'Founded', lead: 'Led', contributor: 'Contributed to' } as const
