@@ -1,0 +1,39 @@
+---
+import SparkLink from './SparkLink.astro'
+
+interface Props {
+  name: string
+  tagline: string
+  summary: string
+  stack?: string
+  href: string
+  kind: 'Case study' | 'Side project'
+}
+const { name, tagline, summary, stack, href, kind } = Astro.props
+const cardId = `card-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+---
+
+<!-- Phones: the whole row is the tap target (the link's ::after covers it). -->
+<div class="relative max-md:border-t max-md:border-line max-md:py-3">
+  <span class="md:relative md:inline-block">
+    <SparkLink
+      href={href}
+      aria-describedby={cardId}
+      class="peer font-bold max-md:text-[17px] max-md:after:absolute max-md:after:inset-0"
+    >{name}</SparkLink>
+    <!-- Hover card: hover-capable pointers or keyboard focus, never touch (docs/adr/0005). -->
+    <span
+      id={cardId}
+      role="tooltip"
+      class="pointer-events-none absolute top-1/2 left-full z-10 ml-4 hidden w-80 -translate-y-1/2 flex-col gap-2 rounded-[10px] border border-edge/50 bg-raised px-4 pt-3.5 pb-4 shadow-[0_12px_32px_rgb(0_0_0/0.45)] md:peer-focus-visible:flex md:pointer-fine:peer-hover:flex"
+    >
+      <span class="flex items-baseline justify-between gap-3">
+        <span class="font-bold">{name}</span>
+        <span class="font-mono text-[11px] whitespace-nowrap text-muted">{kind} ↗</span>
+      </span>
+      <span class="text-sm/normal text-ink-soft">{summary}</span>
+      {stack && <span class="font-mono text-[11px] text-muted">{stack}</span>}
+    </span>
+  </span>
+  <span class="text-muted max-md:mt-0.5 max-md:block max-md:text-[15px]"><span class="max-md:hidden"> - </span>{tagline}</span>
+</div>

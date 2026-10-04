@@ -1,0 +1,68 @@
+---
+// Corner note on the first keyboard focus of a visit (docs/adr/0005).
+---
+
+<div role="status" class="sr-only" data-kbd-status></div>
+<div
+  hidden
+  data-kbd-welcome
+  class="group fixed top-5 right-5 z-40 flex w-80 animate-toast-in items-start gap-3 rounded-[10px] border border-edge/50 bg-raised py-3.5 pr-3.5 pl-4 shadow-[0_12px_32px_rgb(0_0_0/0.45)] max-md:inset-x-4 max-md:top-auto max-md:bottom-[calc(76px+env(safe-area-inset-bottom))] max-md:w-auto motion-reduce:animate-none"
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true" class="mt-0.5 size-5 flex-none fill-none stroke-current stroke-[1.5] text-muted">
+    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+    <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"></path>
+  </svg>
+  <div class="flex flex-1 flex-col gap-1.5 text-sm">
+    <p class="font-semibold">You're using a keyboard.</p>
+    <p class="text-ink-soft">Everything here works without a mouse.</p>
+    <!-- The bar's animation IS the 6s timer: hover pauses both; reduced motion hides it but it still runs. -->
+    <div
+      data-kbd-bar
+      aria-hidden="true"
+      class="h-0.5 origin-left animate-countdown rounded-sm bg-accent group-hover:[animation-play-state:paused] motion-reduce:invisible"
+    >
+    </div>
+  </div>
+  <button
+    type="button"
+    aria-label="Dismiss"
+    class="inline-flex size-8 flex-none cursor-pointer items-center justify-center rounded-md text-muted hover:bg-surface hover:text-ink"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="size-4 fill-none stroke-current stroke-2"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+  </button>
+</div>
+
+<script>
+  const toast = document.querySelector<HTMLElement>('[data-kbd-welcome]')
+  const status = document.querySelector<HTMLElement>('[data-kbd-status]')
+  const KEY = 'kbd-welcome'
+
+  if (toast && status) {
+    let seen = false
+    try {
+      seen = sessionStorage.getItem(KEY) === '1'
+    } catch {}
+
+    const close = () => {
+      toast.hidden = true
+    }
+    toast.querySelector('[data-kbd-bar]')?.addEventListener('animationend', close)
+    toast.querySelector('button')?.addEventListener('click', close)
+    addEventListener('keydown', (e) => e.key === 'Escape' && close())
+
+    if (!seen) {
+      // Focus that didn't follow a click or tap within 600ms came from the keyboard.
+      let lastPointer = 0
+      addEventListener('pointerdown', () => (lastPointer = Date.now()), true)
+      addEventListener('focusin', function onFocus() {
+        if (Date.now() - lastPointer < 600) return
+        removeEventListener('focusin', onFocus)
+        try {
+          sessionStorage.setItem(KEY, '1')
+        } catch {}
+        toast.hidden = false
+        status.textContent = "You're using a keyboard. Everything here works without a mouse."
+      })
+    }
+  }
+</script>

@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = HTMLAttributes<'a'> & {
+  /** Phones: grow to a 44px tap target. Leave off for links inside running text. */
+  tap?: boolean
+}
+const { tap = false, class: className, ...rest } = Astro.props
+const shine = 'absolute block opacity-0 clip-star'
+---
+
+<a
+  class:list={[
+    'group/spk transition-colors duration-150 active:text-accent md:relative',
+    'md:hover:text-white md:hover:decoration-accent md:focus-visible:text-white md:focus-visible:decoration-accent',
+    tap && 'max-md:inline-flex max-md:min-h-11 max-md:items-center',
+    className,
+  ]}
+  {...rest}
+><span aria-hidden="true" class="pointer-events-none absolute inset-0 hidden md:block motion-reduce:hidden"
+    ><span class:list={[shine, '-top-2 -left-2.5 size-2.5 bg-accent group-hover/spk:animate-spk-1 group-focus-visible/spk:animate-spk-1']}></span
+    ><span class:list={[shine, '-top-[7px] -right-[9px] size-[7px] bg-glint group-hover/spk:animate-spk-2 group-focus-visible/spk:animate-spk-2']}></span
+    ><span class:list={[shine, 'right-[18%] -bottom-[9px] size-2 bg-accent group-hover/spk:animate-spk-3 group-focus-visible/spk:animate-spk-3']}></span
+  ></span><slot /></a>

@@ -17,9 +17,12 @@ const writing = defineCollection({
     z.object({
       title: z.string(),
       date: z.coerce.date(),
-      tag: z.string().default('Note'),
+      topic: z.string().default('Notes'),
+      /** One line under the title in lists (the "hook"). */
       summary: z.string(),
       hero: mdImage(image).optional(),
+      /** Up to 3 bullets shown in the hero slot when there is no hero image. */
+      tldr: z.array(z.string()).max(3).optional(),
       draft: z.boolean().default(false),
     }),
 })
@@ -29,8 +32,14 @@ const work = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      /** Short one-liner on Home: "Name - tagline". */
+      tagline: z.string(),
+      /** Two-line description: post summary and project hover card. */
       summary: z.string(),
+      /** Kicker on the case study page: "<topic> · Case study". */
+      topic: z.string().optional(),
       hero: mdImage(image).optional(),
+      tldr: z.array(z.string()).max(3).optional(),
       /** Path under public/, e.g. /eds-showreel.mp4. Plays in place of the hero image. */
       heroVideo: z.string().optional(),
       /** `W / H` of heroVideo — reserves the box before metadata loads, so the page never jumps. */
@@ -49,6 +58,8 @@ const experiences = defineCollection({
     role: z.string(),
     company: z.string(),
     period: z.string(),
+    /** One line under the role on Home. */
+    summary: z.string().optional(),
     order: z.number(),
     stack: z.string().optional(),
   }),
@@ -58,6 +69,7 @@ const projects = defineCollection({
   loader: mdoc('projects'),
   schema: z.object({
     title: z.string(),
+    tagline: z.string(),
     summary: z.string(),
     order: z.number(),
     stack: z.string().optional(),

@@ -8,5 +8,7 @@ export default defineMarkdocConfig({
     // Astro auto-resolves ![alt](src) through astro:assets before this renders;
     // this just adds spacing/rounding to the optimized <Image>.
     image: { ...nodes.image, render: component('./src/components/MdocImage.astro') },
+    // Body links get the same sparkle as every other text link.
+    link: { ...nodes.link, render: component('./src/components/SparkLink.astro') },
   },
 })
