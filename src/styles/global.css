@@ -40,16 +40,45 @@
 }
 
 /* Registered so switching palettes can fade every colour from one rule. */
-@property --bg { syntax: '<color>'; inherits: true; initial-value: #2b2b2e; }
-@property --surface { syntax: '<color>'; inherits: true; initial-value: #353539; }
-@property --rule { syntax: '<color>'; inherits: true; initial-value: #47474d; }
-@property --text { syntax: '<color>'; inherits: true; initial-value: #f2f2f4; }
-@property --muted { syntax: '<color>'; inherits: true; initial-value: #b0b1b8; }
-@property --accent { syntax: '<color>'; inherits: true; initial-value: #a9c8ff; }
+@property --bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #2b2b2e;
+}
+@property --surface {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #353539;
+}
+@property --rule {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #47474d;
+}
+@property --text {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f2f2f4;
+}
+@property --muted {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #b0b1b8;
+}
+@property --accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #a9c8ff;
+}
 
 :root {
-  transition: --bg 0.6s ease, --surface 0.6s ease, --rule 0.6s ease, --text 0.6s ease,
-    --muted 0.6s ease, --accent 0.6s ease;
+  transition:
+    --bg 0.6s ease,
+    --surface 0.6s ease,
+    --rule 0.6s ease,
+    --text 0.6s ease,
+    --muted 0.6s ease,
+    --accent 0.6s ease;
 }
 @media (prefers-reduced-motion: reduce) {
   :root {
@@ -102,38 +131,84 @@
   --animate-countdown: countdown 6s linear forwards;
 
   @keyframes spk-spin {
-    0% { opacity: 0; transform: scale(0) rotate(0); }
-    45% { opacity: 1; transform: scale(1.25) rotate(60deg); }
-    100% { opacity: 0; transform: scale(0.5) rotate(120deg); }
+    0% {
+      opacity: 0;
+      transform: scale(0) rotate(0);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(1.25) rotate(60deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.5) rotate(120deg);
+    }
   }
   @keyframes spk-float {
-    0% { opacity: 0; transform: translateY(3px) scale(0); }
-    40% { opacity: 1; transform: translateY(-2px) scale(1.3); }
-    100% { opacity: 0; transform: translateY(-6px) scale(0.4); }
+    0% {
+      opacity: 0;
+      transform: translateY(3px) scale(0);
+    }
+    40% {
+      opacity: 1;
+      transform: translateY(-2px) scale(1.3);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.4);
+    }
   }
   @keyframes spk-counter {
-    0% { opacity: 0; transform: scale(0) rotate(0); }
-    50% { opacity: 1; transform: scale(1.1) rotate(-45deg); }
-    100% { opacity: 0; transform: scale(0.4) rotate(-90deg); }
+    0% {
+      opacity: 0;
+      transform: scale(0) rotate(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1) rotate(-45deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.4) rotate(-90deg);
+    }
   }
   @keyframes pill-in {
-    from { scale: 0.4 1; }
+    from {
+      scale: 0.4 1;
+    }
   }
   @keyframes pulse-ring {
-    0% { opacity: 0.6; transform: scale(0.6); }
-    100% { opacity: 0; transform: scale(1.6); }
+    0% {
+      opacity: 0.6;
+      transform: scale(0.6);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
   }
   @keyframes bubble-in {
-    from { opacity: 0; transform: scale(0.85); }
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
   }
   @keyframes row-in {
-    from { opacity: 0; transform: translateY(4px); }
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
   }
   @keyframes toast-in {
-    from { opacity: 0; transform: translateY(-8px); }
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
   }
   @keyframes countdown {
-    to { transform: scaleX(0); }
+    to {
+      transform: scaleX(0);
+    }
   }
 }
 

@@ -3,11 +3,13 @@
 Date: 2026-10-04 · Status: accepted
 
 ## Context
+
 The old site had light/dark mode, a `/design` ThemeLab with live overrides, and
 `src/theme.config.ts` driving every token. The redesign is dark-only ("never a light mode") and
 adds a time-aware palette: Dawn 5–8am, Day 8am–5pm, Dusk 5–8pm, Night 8pm–5am.
 
 ## Decision
+
 - Delete light mode, ThemeToggle, ThemeLab, OverridePill, `lib/overrides.ts`, `lib/theme.ts`
   and the type-scale machinery in `theme.config.ts`.
 - Ship the **Bold** token set (bg, surface, rule, text, muted, accent per palette) as CSS
@@ -21,5 +23,6 @@ adds a time-aware palette: Dawn 5–8am, Day 8am–5pm, Dusk 5–8pm, Night 8pm�
   is Auto again.
 
 ## Consequences
+
 The README's base look (#181715 + peach) never appears as such; Dawn is the closest.
 Every palette must keep text ≥ 4.5:1 — re-check if a token changes.

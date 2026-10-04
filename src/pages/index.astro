@@ -12,7 +12,8 @@ import { isPublished, monthYear } from '../lib/content'
 const home = (await getEntry('pages', 'home'))!
 const { Content: Bio } = await render(home)
 
-const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) => a.data.order - b.data.order
+const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) =>
+  a.data.order - b.data.order
 const projects = [
   ...(await getCollection('work', isPublished)).sort(byOrder).map(({ id, data }) => ({
     name: data.title,
@@ -47,73 +48,118 @@ const h2 = 'text-xl font-bold max-md:text-[22px]'
         </div>
         <PalettePicker />
       </div>
-      <div class="flex flex-col gap-4"><Bio /></div>
+      <div class="flex flex-col gap-4">
+        <Bio />
+      </div>
       <nav aria-label="Elsewhere" class="flex flex-wrap gap-4 max-md:gap-x-6 max-md:gap-y-0">
-        {socials.map((s) => <SparkLink tap href={s.href}>{s.label}</SparkLink>)}
-        <SparkLink tap href="/writing">Writing</SparkLink>
+        {socials.map((s) => (
+          <SparkLink tap href={s.href}>
+            {s.label}
+          </SparkLink>
+        ))}
+        <SparkLink tap href="/writing">
+          Writing
+        </SparkLink>
       </nav>
-      <p>Email: <SparkLink tap href={`mailto:${site.email}`} class="text-muted">{site.email}</SparkLink></p>
+      <p>
+        Email:{' '}
+        <SparkLink tap href={`mailto:${site.email}`} class="text-muted">
+          {site.email}
+        </SparkLink>
+      </p>
     </header>
 
-    <section id="projects" aria-labelledby="projects-h" class="relative flex scroll-mt-4 flex-col gap-2.5 max-md:gap-0">
-      <h2 id="projects-h" class:list={[h2, 'mb-1']}>Projects</h2>
-      {projects.map((p) => <ProjectRow {...p} />)}
+    <section
+      id="projects"
+      aria-labelledby="projects-h"
+      class="relative flex scroll-mt-4 flex-col gap-2.5 max-md:gap-0"
+    >
+      <h2 id="projects-h" class:list={[h2, 'mb-1']}>
+        Projects
+      </h2>
+      {projects.map((p) => (
+        <ProjectRow {...p} />
+      ))}
       <div
         data-project-card
         aria-hidden="true"
         class="pointer-events-none absolute top-0 left-0 z-10 w-80 overflow-hidden rounded-[10px] border border-edge/50 bg-raised opacity-0 shadow-[0_12px_32px_rgb(0_0_0/0.45)] transition-[opacity,translate,height] duration-200 ease-out max-md:hidden motion-reduce:transition-opacity"
-      ><div class="flex flex-col gap-2 px-4 pt-3.5 pb-4"></div></div>
+      >
+        <div class="flex flex-col gap-2 px-4 pt-3.5 pb-4"></div>
+      </div>
     </section>
 
-    {
-      posts.length > 0 && (
-        <section aria-labelledby="writing-h" class="flex flex-col gap-2.5 max-md:gap-0">
-          <div class="mb-1 flex flex-wrap items-baseline justify-between gap-2">
-            <h2 id="writing-h" class={h2}>Writing</h2>
-            <SparkLink tap href="/writing" class="text-muted">All posts →</SparkLink>
-          </div>
-          {posts.map((post) => (
-            <a
-              href={`/writing/${post.id}`}
-              class="group/spk flex flex-wrap items-baseline justify-between gap-x-6 gap-y-0.5 py-0.5 no-underline max-md:gap-y-1 max-md:border-t max-md:border-line max-md:py-3"
-            >
-              <span>
-                <span class="relative transition-colors duration-150 md:group-hover/spk:text-white md:group-hover/spk:decoration-accent md:group-focus-visible/spk:text-white md:group-focus-visible/spk:decoration-accent font-bold underline decoration-edge underline-offset-3"><Sparkle />{post.data.title}</span>
-                <span class="text-muted max-md:mt-0.5 max-md:block max-md:text-[15px]">
-                  <span class="max-md:hidden"> - </span>
-                  {post.data.summary}
-                </span>
+    {posts.length > 0 && (
+      <section aria-labelledby="writing-h" class="flex flex-col gap-2.5 max-md:gap-0">
+        <div class="mb-1 flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="writing-h" class={h2}>
+            Writing
+          </h2>
+          <SparkLink tap href="/writing" class="text-muted">
+            All posts →
+          </SparkLink>
+        </div>
+        {posts.map((post) => (
+          <a
+            href={`/writing/${post.id}`}
+            class="group/spk flex flex-wrap items-baseline justify-between gap-x-6 gap-y-0.5 py-0.5 no-underline max-md:gap-y-1 max-md:border-t max-md:border-line max-md:py-3"
+          >
+            <span>
+              <span class="relative transition-colors duration-150 md:group-hover/spk:text-white md:group-hover/spk:decoration-accent md:group-focus-visible/spk:text-white md:group-focus-visible/spk:decoration-accent font-medium underline decoration-edge underline-offset-3">
+                <Sparkle />
+                {post.data.title}
               </span>
-              <span class="meta whitespace-nowrap text-muted">{monthYear(post.data.date)}</span>
-            </a>
-          ))}
-        </section>
-      )
-    }
+              <span class="text-muted max-md:mt-0.5 max-md:block max-md:text-[15px]">
+                <span class="max-md:hidden"> - </span>
+                {post.data.summary}
+              </span>
+            </span>
+            <span class="meta whitespace-nowrap text-muted">{monthYear(post.data.date)}</span>
+          </a>
+        ))}
+      </section>
+    )}
 
-    <section id="experience" aria-labelledby="experience-h" class="flex scroll-mt-4 flex-col gap-[18px]">
-      <h2 id="experience-h" class={h2}>Experience</h2>
+    <section
+      id="experience"
+      aria-labelledby="experience-h"
+      class="flex scroll-mt-4 flex-col gap-[18px]"
+    >
+      <h2 id="experience-h" class={h2}>
+        Experience
+      </h2>
       <ExperienceList entries={experiences} />
     </section>
 
     <!-- Phones only: on desktop the header links already cover it. -->
-    <section id="contact" aria-labelledby="contact-h" class="hidden scroll-mt-4 flex-col gap-2.5 max-md:flex">
-      <h2 id="contact-h" class:list={[h2, 'mb-1']}>Contact</h2>
+    <section
+      id="contact"
+      aria-labelledby="contact-h"
+      class="hidden scroll-mt-4 flex-col gap-2.5 max-md:flex"
+    >
+      <h2 id="contact-h" class:list={[h2, 'mb-1']}>
+        Contact
+      </h2>
       <p class="mb-1 text-muted">Email is the fastest way to reach me.</p>
-      {
-        [{ label: 'Email', href: `mailto:${site.email}`, handle: site.email }, ...socials].map((c) => (
-          <a
-            href={c.href}
-            class="flex min-h-11 flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-line py-2 no-underline active:text-accent"
-          >
-            <span class="font-semibold underline decoration-edge underline-offset-3">{c.label}</span>
-            <span class="font-mono text-[13px] text-muted">
-              {c.handle}
-              {c.label !== 'Email' && ' ↗'}
-            </span>
-          </a>
-        ))
-      }
+      {[
+        {
+          label: 'Email',
+          href: `mailto:${site.email}`,
+          handle: site.email,
+        },
+        ...socials,
+      ].map((c) => (
+        <a
+          href={c.href}
+          class="flex min-h-11 flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-line py-2 no-underline active:text-accent"
+        >
+          <span class="font-semibold underline decoration-edge underline-offset-3">{c.label}</span>
+          <span class="font-mono text-[13px] text-muted">
+            {c.handle}
+            {c.label !== 'Email' && ' ↗'}
+          </span>
+        </a>
+      ))}
     </section>
   </main>
 </Base>

@@ -14,58 +14,67 @@ const topics = [...new Set(posts.map((p) => p.data.topic))].sort()
 const plural = (n: number) => `${n} post${n === 1 ? '' : 's'}`
 ---
 
-<Base title="Writing" description="Notes on frontend architecture, design systems, performance and accessibility." section="writing">
+<Base
+  title="Writing"
+  description="Notes on frontend architecture, design systems, performance and accessibility."
+  section="writing"
+>
   <main id="content" class="flex flex-col gap-8">
     <header class="flex flex-col gap-4">
-      <SparkLink tap href="/" class="self-start font-mono text-[13px] text-muted no-underline">← {site.name}</SparkLink>
+      <SparkLink tap href="/" class="self-start font-mono text-[13px] text-muted no-underline">
+        ← {site.name}
+      </SparkLink>
       <div class="flex flex-col gap-1.5">
         <h1 class="text-2xl/tight font-bold">Writing</h1>
-        <p class="text-muted">Notes on frontend architecture, design systems, performance and accessibility.</p>
+        <p class="text-muted">
+          Notes on frontend architecture, design systems, performance and accessibility.
+        </p>
       </div>
     </header>
 
     <div class="flex flex-col gap-6" data-writing-filter>
       <!-- Stays reachable while scrolling a long list. -->
       <div class="sticky top-0 z-10 -my-2.5 flex flex-col gap-2 bg-bg py-2.5">
-        {
-          topics.length > 1 && (
-            <div
-              role="group"
-              aria-label="Filter posts by topic"
-              class="flex gap-5 overflow-x-auto [scrollbar-width:none] max-md:scroll-px-4 max-md:pr-10 max-md:[mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)] [&::-webkit-scrollbar]:hidden"
-            >
-              {['All', ...topics].map((topic) => (
-                <button
-                  type="button"
-                  data-topic={topic}
-                  aria-pressed={topic === 'All' ? 'true' : 'false'}
-                  class="min-h-8 cursor-pointer py-1.5 whitespace-nowrap text-muted hover:text-ink aria-pressed:font-semibold aria-pressed:text-ink aria-pressed:underline aria-pressed:decoration-2 aria-pressed:underline-offset-[6px] max-md:min-h-11"
-                >
-                  {topic}
-                </button>
-              ))}
-            </div>
-          )
-        }
-        <p class="meta text-muted" aria-live="polite" data-result>{plural(posts.length)}</p>
+        {topics.length > 1 && (
+          <div
+            role="group"
+            aria-label="Filter posts by topic"
+            class="flex gap-5 overflow-x-auto [scrollbar-width:none] max-md:scroll-px-4 max-md:pr-10 max-md:[mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)] [&::-webkit-scrollbar]:hidden"
+          >
+            {['All', ...topics].map((topic) => (
+              <button
+                type="button"
+                data-topic={topic}
+                aria-pressed={topic === 'All' ? 'true' : 'false'}
+                class="min-h-8 cursor-pointer py-1.5 whitespace-nowrap text-muted hover:text-ink aria-pressed:font-semibold aria-pressed:text-ink aria-pressed:underline aria-pressed:decoration-2 aria-pressed:underline-offset-[6px] max-md:min-h-11"
+              >
+                {topic}
+              </button>
+            ))}
+          </div>
+        )}
+        <p class="meta text-muted" aria-live="polite" data-result>
+          {plural(posts.length)}
+        </p>
       </div>
 
       <div class="flex flex-col gap-[18px] max-md:gap-0">
-        {
-          posts.map((post) => (
-            <a
-              href={`/writing/${post.id}`}
-              data-topic={post.data.topic}
-              class="group/spk flex flex-col gap-1 no-underline max-md:gap-1.5 max-md:border-t max-md:border-line max-md:py-3.5"
-            >
-              <span class="relative transition-colors duration-150 md:group-hover/spk:text-white md:group-hover/spk:decoration-accent md:group-focus-visible/spk:text-white md:group-focus-visible/spk:decoration-accent self-start font-semibold underline decoration-edge underline-offset-3 max-md:text-lg/[1.35]"><Sparkle />{post.data.title}</span>
-              <span class="text-sm text-muted max-md:text-[15px]">{post.data.summary}</span>
-              <span class="meta text-muted">
-                {post.data.topic} · {readMinutes(post.body)} min · {monthYear(post.data.date)}
-              </span>
-            </a>
-          ))
-        }
+        {posts.map((post) => (
+          <a
+            href={`/writing/${post.id}`}
+            data-topic={post.data.topic}
+            class="group/spk flex flex-col gap-1 no-underline max-md:gap-1.5 max-md:border-t max-md:border-line max-md:py-3.5"
+          >
+            <span class="relative transition-colors duration-150 md:group-hover/spk:text-white md:group-hover/spk:decoration-accent md:group-focus-visible/spk:text-white md:group-focus-visible/spk:decoration-accent self-start font-semibold underline decoration-edge underline-offset-3 max-md:text-lg/[1.35]">
+              <Sparkle />
+              {post.data.title}
+            </span>
+            <span class="text-sm text-muted max-md:text-[15px]">{post.data.summary}</span>
+            <span class="meta text-muted">
+              {post.data.topic} · {readMinutes(post.body)} min · {monthYear(post.data.date)}
+            </span>
+          </a>
+        ))}
       </div>
     </div>
   </main>
@@ -90,9 +99,14 @@ const plural = (n: number) => `${n} post${n === 1 ? '' : 's'}`
         row.hidden = topic !== 'All' && row.dataset.topic !== topic
         if (!row.hidden) shown++
       }
-      result.textContent = topic === 'All' ? plural(rows.length) : `${shown} of ${plural(rows.length)} · ${topic}`
+      result.textContent =
+        topic === 'All' ? plural(rows.length) : `${shown} of ${plural(rows.length)} · ${topic}`
       // Phones: keep the picked topic centred in the sideways-scrolling row.
-      button.scrollIntoView({ inline: 'center', block: 'nearest', behavior: reduceMotion.matches ? 'auto' : 'smooth' })
+      button.scrollIntoView({
+        inline: 'center',
+        block: 'nearest',
+        behavior: reduceMotion.matches ? 'auto' : 'smooth',
+      })
     })
   }
 </script>

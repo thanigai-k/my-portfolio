@@ -3,6 +3,7 @@
 Date: 2026-10-04 · Status: accepted
 
 ## Decision
+
 - **Home bio** = the design's two paragraphs. Avatar dropped (text first).
 - **Experience** gains `summary` (one line, shown on Home under the role). Home shows top 3 by `order`.
 - **Projects** (case studies + side projects) gain `tagline`: the short "Name - tagline" line.

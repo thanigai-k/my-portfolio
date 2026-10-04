@@ -6,10 +6,7 @@ const mdoc = (dir: string) => glob({ pattern: '**/*.mdoc', base: `./content/${di
 
 /** Accepts a bare path or markdown `![alt](path)` syntax, resolved through Astro's image optimizer. */
 const mdImage = (image: SchemaContext['image']) =>
-  z.preprocess(
-    (s) => (typeof s === 'string' ? (s.match(/\(([^)]+)\)/)?.[1] ?? s) : s),
-    image(),
-  )
+  z.preprocess((s) => (typeof s === 'string' ? (s.match(/\(([^)]+)\)/)?.[1] ?? s) : s), image())
 
 const writing = defineCollection({
   loader: mdoc('writing'),

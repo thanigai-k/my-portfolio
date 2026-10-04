@@ -4,215 +4,182 @@
 // below is CSS-driven and right on first paint. The script only opens, closes and applies picks.
 // Class strings are literal per palette so Tailwind can see them.
 const palettes = [
-    {
-        id: "dawn",
-        name: "Dawn",
-        hint: "5–8am",
-        active: "in-data-[palette=dawn]:inline",
-        yours: "in-data-[auto=dawn]:inline",
-    },
-    {
-        id: "day",
-        name: "Day",
-        hint: "8am–5pm",
-        active: "in-data-[palette=day]:inline",
-        yours: "in-data-[auto=day]:inline",
-    },
-    {
-        id: "dusk",
-        name: "Dusk",
-        hint: "5–8pm",
-        active: "in-data-[palette=dusk]:inline",
-        yours: "in-data-[auto=dusk]:inline",
-    },
-    {
-        id: "night",
-        name: "Night",
-        hint: "8pm–5am",
-        active: "in-data-[palette=night]:inline",
-        yours: "in-data-[auto=night]:inline",
-    },
-];
-const options = [
-    { id: "auto", name: "Auto", hint: "follow my time", yours: "" },
-    ...palettes,
-];
+  {
+    id: 'dawn',
+    name: 'Dawn',
+    hint: '5–8am',
+    active: 'in-data-[palette=dawn]:inline',
+    yours: 'in-data-[auto=dawn]:inline',
+  },
+  {
+    id: 'day',
+    name: 'Day',
+    hint: '8am–5pm',
+    active: 'in-data-[palette=day]:inline',
+    yours: 'in-data-[auto=day]:inline',
+  },
+  {
+    id: 'dusk',
+    name: 'Dusk',
+    hint: '5–8pm',
+    active: 'in-data-[palette=dusk]:inline',
+    yours: 'in-data-[auto=dusk]:inline',
+  },
+  {
+    id: 'night',
+    name: 'Night',
+    hint: '8pm–5am',
+    active: 'in-data-[palette=night]:inline',
+    yours: 'in-data-[auto=night]:inline',
+  },
+]
+const options = [{ id: 'auto', name: 'Auto', hint: 'follow my time', yours: '' }, ...palettes]
 // 24h strip: [palette, hours]
 const strip = [
-    ["night", 5],
-    ["dawn", 3],
-    ["day", 9],
-    ["dusk", 3],
-    ["night", 4],
-] as const;
+  ['night', 5],
+  ['dawn', 3],
+  ['day', 9],
+  ['dusk', 3],
+  ['night', 4],
+] as const
 ---
 
 <div class="relative shrink-0" data-palette-picker>
-    <button
-        type="button"
-        aria-expanded="false"
-        aria-controls="palette-bubble"
-        class="-mr-2.5 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-4 font-mono text-[13px] text-muted transition-colors duration-150 hover:bg-surface hover:text-ink aria-expanded:bg-surface aria-expanded:text-ink"
-    >
-        <span
-            aria-hidden="true"
-            class="relative size-2.5 rounded-full bg-accent after:absolute after:-inset-1 after:animate-pulse-ring after:rounded-full after:border after:border-accent after:opacity-0 motion-reduce:after:animate-none"
-        ></span>
-        <span class="sr-only">Palette:</span>
-        {palettes.map((p) => (
-            <span class:list={["hidden", p.active]}>{p.name}</span>
+  <button
+    type="button"
+    aria-expanded="false"
+    aria-controls="palette-bubble"
+    class="-mr-2.5 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-4 font-mono text-[13px] text-muted transition-colors duration-150 hover:bg-surface hover:text-ink aria-expanded:bg-surface aria-expanded:text-ink"
+  >
+    <span
+      aria-hidden="true"
+      class="relative size-2.5 rounded-full bg-accent after:absolute after:-inset-1 after:animate-pulse-ring after:rounded-full after:border after:border-accent after:opacity-0 motion-reduce:after:animate-none"
+    ></span>
+    <span class="sr-only">Palette:</span>
+    {palettes.map((p) => (
+      <span class:list={['hidden', p.active]}>{p.name}</span>
+    ))}
+    <span class="hidden text-[11px] in-data-[palette-lock]:inline">· locked</span>
+    <span class="sr-only in-data-[palette-lock]:hidden">(following your time)</span>
+    <span class="sr-only">. Change palette</span>
+  </button>
+
+  <div
+    id="palette-bubble"
+    role="dialog"
+    aria-label="Palette"
+    tabindex="-1"
+    hidden
+    class="absolute top-[calc(100%+10px)] right-0 z-30 flex w-70 origin-[calc(100%-18px)_-8px] animate-bubble-in flex-col gap-2.5 rounded-[14px] border border-rule bg-surface px-4 pt-3.5 pb-3 shadow-[0_16px_40px_rgb(0_0_0/0.45)] outline-none before:absolute before:-top-1.5 before:right-4 before:size-2.5 before:rotate-45 before:border-t before:border-l before:border-rule before:bg-surface after:absolute after:inset-x-0 after:-top-3.5 after:h-3.5 motion-reduce:animate-none"
+  >
+    <p class="text-[13px] text-muted in-data-[palette-lock]:hidden">
+      Colours follow your local time. Pick one to try it.
+    </p>
+    <p class="hidden text-[13px] text-muted in-data-[palette-lock]:block">
+      Showing your pick for this visit. Choose Auto to follow your local time again.
+    </p>
+
+    <div aria-hidden="true" class="relative">
+      <div class="flex h-1.5 overflow-hidden rounded-[3px]">
+        {strip.map(([id, hours]) => (
+          <span data-palette={id} class="bg-bg" style={`flex: ${hours}`} />
         ))}
-        <span class="hidden text-[11px] in-data-[palette-lock]:inline">
-            · locked
-        </span>
-        <span class="sr-only in-data-[palette-lock]:hidden">
-            (following your time)
-        </span>
-        <span class="sr-only">. Change palette</span>
-    </button>
-
-    <div
-        id="palette-bubble"
-        role="dialog"
-        aria-label="Palette"
-        tabindex="-1"
-        hidden
-        class="absolute top-[calc(100%+10px)] right-0 z-30 flex w-70 origin-[calc(100%-18px)_-8px] animate-bubble-in flex-col gap-2.5 rounded-[14px] border border-rule bg-surface px-4 pt-3.5 pb-3 shadow-[0_16px_40px_rgb(0_0_0/0.45)] outline-none before:absolute before:-top-1.5 before:right-4 before:size-2.5 before:rotate-45 before:border-t before:border-l before:border-rule before:bg-surface after:absolute after:inset-x-0 after:-top-3.5 after:h-3.5 motion-reduce:animate-none"
-    >
-        <p class="text-[13px] text-muted in-data-[palette-lock]:hidden">
-            Colours follow your local time. Pick one to try it.
-        </p>
-        <p class="hidden text-[13px] text-muted in-data-[palette-lock]:block">
-            Showing your pick for this visit. Choose Auto to follow your local
-            time again.
-        </p>
-
-        <div aria-hidden="true" class="relative">
-            <div class="flex h-1.5 overflow-hidden rounded-[3px]">
-                {strip.map(([id, hours]) => (
-                    <span
-                        data-palette={id}
-                        class="bg-bg"
-                        style={`flex: ${hours}`}
-                    />
-                ))}
-            </div>
-            <span class="absolute -top-1 left-(--hour-pct) h-3.5 w-0.5 rounded-[1px] bg-ink"></span>
-        </div>
-
-        <fieldset class="flex flex-col gap-0.5">
-            <legend class="sr-only">Choose a palette</legend>
-            {options.map((o, i) => (
-                <label
-                    class="relative grid min-h-11 animate-row-in cursor-pointer grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-rule has-checked:bg-rule has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 has-focus-visible:outline-accent motion-reduce:animate-none"
-                    style={`animation-delay: ${40 + i * 35}ms`}
-                >
-                    <input
-                        type="radio"
-                        name="palette"
-                        value={o.id}
-                        class="peer sr-only"
-                    />
-                    <span
-                        aria-hidden="true"
-                        data-palette={o.id === "auto" ? undefined : o.id}
-                        data-auto-swatch={o.id === "auto" ? "" : undefined}
-                        class="size-3 rounded-full border-2 border-accent bg-bg shadow-[0_0_0_1px_rgb(255_255_255/0.15)] transition-transform duration-200 peer-checked:scale-125 motion-reduce:transition-none"
-                    />
-                    <span class="text-sm">
-                        {o.name}
-                        {o.yours && (
-                            <span
-                                class:list={[
-                                    "ml-1.5 hidden font-mono text-[11px] text-accent",
-                                    o.yours,
-                                ]}
-                            >
-                                · your time
-                            </span>
-                        )}
-                    </span>
-                    <span class="font-mono text-xs text-muted">{o.hint}</span>
-                </label>
-            ))}
-        </fieldset>
-        <p class="font-mono text-[11px] text-muted max-md:hidden">
-            ↑↓ to choose · Esc to close
-        </p>
+      </div>
+      <span class="absolute -top-1 left-(--hour-pct) h-3.5 w-0.5 rounded-[1px] bg-ink"></span>
     </div>
+
+    <fieldset class="flex flex-col gap-0.5">
+      <legend class="sr-only">Choose a palette</legend>
+      {options.map((o, i) => (
+        <label
+          class="relative grid min-h-11 animate-row-in cursor-pointer grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-rule has-checked:bg-rule has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 has-focus-visible:outline-accent motion-reduce:animate-none"
+          style={`animation-delay: ${40 + i * 35}ms`}
+        >
+          <input type="radio" name="palette" value={o.id} class="peer sr-only" />
+          <span
+            aria-hidden="true"
+            data-palette={o.id === 'auto' ? undefined : o.id}
+            data-auto-swatch={o.id === 'auto' ? '' : undefined}
+            class="size-3 rounded-full border-2 border-accent bg-bg shadow-[0_0_0_1px_rgb(255_255_255/0.15)] transition-transform duration-200 peer-checked:scale-125 motion-reduce:transition-none"
+          />
+          <span class="text-sm">
+            {o.name}
+            {o.yours && (
+              <span class:list={['ml-1.5 hidden font-mono text-[11px] text-accent', o.yours]}>
+                · your time
+              </span>
+            )}
+          </span>
+          <span class="font-mono text-xs text-muted">{o.hint}</span>
+        </label>
+      ))}
+    </fieldset>
+    <p class="font-mono text-[11px] text-muted max-md:hidden">↑↓ to choose · Esc to close</p>
+  </div>
 </div>
 
 <script>
-    const picker = document.querySelector<HTMLElement>("[data-palette-picker]");
-    const button = picker?.querySelector("button");
-    const bubble = picker?.querySelector<HTMLElement>("[role=dialog]");
+  const picker = document.querySelector<HTMLElement>('[data-palette-picker]')
+  const button = picker?.querySelector('button')
+  const bubble = picker?.querySelector<HTMLElement>('[role=dialog]')
 
-    if (picker && button && bubble) {
-        const root = document.documentElement;
-        const auto = root.dataset.auto ?? "day";
-        const locked = root.hasAttribute("data-palette-lock");
-        picker
-            .querySelector("[data-auto-swatch]")
-            ?.setAttribute("data-palette", auto);
-        const current = picker.querySelector<HTMLInputElement>(
-            `input[value="${locked ? root.dataset.palette : "auto"}"]`,
-        );
-        if (current) current.checked = true;
+  if (picker && button && bubble) {
+    const root = document.documentElement
+    const auto = root.dataset.auto ?? 'day'
+    const locked = root.hasAttribute('data-palette-lock')
+    picker.querySelector('[data-auto-swatch]')?.setAttribute('data-palette', auto)
+    const current = picker.querySelector<HTMLInputElement>(
+      `input[value="${locked ? root.dataset.palette : 'auto'}"]`,
+    )
+    if (current) current.checked = true
 
-        let pinned = false;
-        let openTimer = 0;
-        let closeTimer = 0;
-        const setOpen = (open: boolean, pin = open) => {
-            bubble.hidden = !open;
-            button.setAttribute("aria-expanded", String(open));
-            pinned = open && pin;
-        };
-
-        // Mouse: open after 120ms, close 300ms after leaving; the bubble's ::after bridges the gap.
-        picker.addEventListener("mouseenter", () => {
-            clearTimeout(closeTimer);
-            if (bubble.hidden)
-                openTimer = window.setTimeout(() => setOpen(true, false), 120);
-        });
-        picker.addEventListener("mouseleave", () => {
-            clearTimeout(openTimer);
-            if (!pinned)
-                closeTimer = window.setTimeout(() => setOpen(false), 300);
-        });
-        // Click pins it open (or closes it if already pinned). Keyboard lands on the selected option.
-        button.addEventListener("click", () => {
-            clearTimeout(openTimer);
-            const open = !!bubble.hidden || !pinned;
-            setOpen(open);
-            if (open)
-                bubble
-                    .querySelector<HTMLInputElement>("input:checked")
-                    ?.focus();
-        });
-        // Picking never closes: it pins, so visitors can try each palette.
-        picker.addEventListener("change", (e) => {
-            const value = (e.target as HTMLInputElement).value;
-            const lock = value !== "auto";
-            root.dataset.palette = lock ? value : auto;
-            root.toggleAttribute("data-palette-lock", lock);
-            try {
-                if (lock) sessionStorage.setItem("palette", value);
-                else sessionStorage.removeItem("palette");
-            } catch {}
-            pinned = true;
-        });
-        picker.addEventListener("keydown", (e) => {
-            if (e.key !== "Escape" || bubble.hidden) return;
-            setOpen(false);
-            button.focus();
-        });
-        picker.addEventListener("focusout", (e) => {
-            if (!picker.contains(e.relatedTarget as Node | null))
-                setOpen(false);
-        });
-        document.addEventListener("pointerdown", (e) => {
-            if (!bubble.hidden && !picker.contains(e.target as Node))
-                setOpen(false);
-        });
+    let pinned = false
+    let openTimer = 0
+    let closeTimer = 0
+    const setOpen = (open: boolean, pin = open) => {
+      bubble.hidden = !open
+      button.setAttribute('aria-expanded', String(open))
+      pinned = open && pin
     }
+
+    // Mouse: open after 120ms, close 300ms after leaving; the bubble's ::after bridges the gap.
+    picker.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimer)
+      if (bubble.hidden) openTimer = window.setTimeout(() => setOpen(true, false), 120)
+    })
+    picker.addEventListener('mouseleave', () => {
+      clearTimeout(openTimer)
+      if (!pinned) closeTimer = window.setTimeout(() => setOpen(false), 300)
+    })
+    // Click pins it open (or closes it if already pinned). Keyboard lands on the selected option.
+    button.addEventListener('click', () => {
+      clearTimeout(openTimer)
+      const open = !!bubble.hidden || !pinned
+      setOpen(open)
+      if (open) bubble.querySelector<HTMLInputElement>('input:checked')?.focus()
+    })
+    // Picking never closes: it pins, so visitors can try each palette.
+    picker.addEventListener('change', (e) => {
+      const value = (e.target as HTMLInputElement).value
+      const lock = value !== 'auto'
+      root.dataset.palette = lock ? value : auto
+      root.toggleAttribute('data-palette-lock', lock)
+      try {
+        if (lock) sessionStorage.setItem('palette', value)
+        else sessionStorage.removeItem('palette')
+      } catch {}
+      pinned = true
+    })
+    picker.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape' || bubble.hidden) return
+      setOpen(false)
+      button.focus()
+    })
+    picker.addEventListener('focusout', (e) => {
+      if (!picker.contains(e.relatedTarget as Node | null)) setOpen(false)
+    })
+    document.addEventListener('pointerdown', (e) => {
+      if (!bubble.hidden && !picker.contains(e.target as Node)) setOpen(false)
+    })
+  }
 </script>

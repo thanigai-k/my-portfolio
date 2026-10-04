@@ -17,13 +17,18 @@ const cardId = `card-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
     <SparkLink
       href={href}
       aria-describedby={cardId}
-      class="font-bold max-md:text-[17px] max-md:after:absolute max-md:after:inset-0"
-    >{name}</SparkLink>
+      class="max-md:text-[17px] max-md:after:absolute max-md:after:inset-0"
+    >
+      {name}
+    </SparkLink>
     <!-- Card content: the link's description, and what the shared hover card in index.astro shows (docs/adr/0005). -->
     <span id={cardId} hidden>
       <span class="font-bold">{name}</span>
       <span class="text-sm/normal text-ink-soft">{summary}</span>
     </span>
   </span>
-  <span class="text-muted max-md:mt-0.5 max-md:block max-md:text-[15px]"><span class="max-md:hidden"> - </span>{tagline}</span>
+  <span class="text-muted max-md:mt-0.5 max-md:block max-md:text-[15px]">
+    <span class="max-md:hidden"> - </span>
+    {tagline}
+  </span>
 </div>

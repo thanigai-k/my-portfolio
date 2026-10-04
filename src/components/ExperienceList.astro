@@ -7,17 +7,15 @@ interface Props {
 const { entries } = Astro.props
 ---
 
-{
-  entries.map(({ data }) => (
-    <div class="flex flex-col gap-1">
-      <div class="flex flex-wrap items-baseline justify-between gap-x-6">
-        <span>
-          <b class="font-bold">{data.role}</b>
-          <span class="text-muted"> - {data.company}</span>
-        </span>
-        <span class="meta whitespace-nowrap text-muted">{data.period}</span>
-      </div>
-      {data.summary && <p class="max-w-[600px] text-[0.9em] text-muted">{data.summary}</p>}
+{entries.map(({ data }) => (
+  <div class="flex flex-col gap-1">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-6">
+      <span>
+        <strong class="font-medium">{data.role}</strong>
+        <span class="text-muted"> - {data.company}</span>
+      </span>
+      <span class="meta whitespace-nowrap text-muted">{data.period}</span>
     </div>
-  ))
-}
+    {data.summary && <p class="max-w-[600px] text-[0.9em] text-muted">{data.summary}</p>}
+  </div>
+))}

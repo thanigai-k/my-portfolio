@@ -4,7 +4,9 @@ import Post from '../../layouts/Post.astro'
 import { isPublished } from '../../lib/content'
 
 export async function getStaticPaths() {
-  const studies = (await getCollection('work', isPublished)).sort((a, b) => a.data.order - b.data.order)
+  const studies = (await getCollection('work', isPublished)).sort(
+    (a, b) => a.data.order - b.data.order,
+  )
   const link = (s?: CollectionEntry<'work'>) => s && { href: `/work/${s.id}`, title: s.data.title }
   return studies.map((study, i) => ({
     params: { slug: study.id },
@@ -24,7 +26,13 @@ const { Content } = await render(study)
   crumb={{ href: '/#projects', title: 'Projects' }}
   section="projects"
   hero={{
-    video: data.heroVideo ? { src: data.heroVideo, aspect: data.heroVideoAspect, position: data.heroVideoObjectPosition } : undefined,
+    video: data.heroVideo
+      ? {
+          src: data.heroVideo,
+          aspect: data.heroVideoAspect,
+          position: data.heroVideoObjectPosition,
+        }
+      : undefined,
     image: data.hero,
     tldr: data.tldr,
   }}

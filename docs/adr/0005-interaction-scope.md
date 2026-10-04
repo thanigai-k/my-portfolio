@@ -3,6 +3,7 @@
 Date: 2026-10-04 · Status: accepted
 
 ## Decision
+
 - Ship every item on the canvas's **Confirmed** page. ⌘K search (Fun page) is out.
 - **Keyboard welcome**: first keyboard focus of a visit (`sessionStorage`), not per page.
   "Press / to search" is dropped with ⌘K. The 6s timer is the progress bar's own animation
@@ -20,5 +21,6 @@ Date: 2026-10-04 · Status: accepted
   No desktop nav beyond the header links.
 
 ## Consequences
+
 Hover card can clip at the very top/bottom of the viewport. Add JS clamping if that shows up.
 Without JS there is no hover card; the description is still read on focus.

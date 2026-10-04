@@ -55,10 +55,13 @@ const paletteScript = `(() => {
     <a
       href="#content"
       class="absolute -top-20 left-3 z-50 rounded-md bg-ink px-4 py-3 font-semibold text-bg no-underline focus:top-3"
-      >Skip to content</a
     >
+      Skip to content
+    </a>
     <div class="grow px-[clamp(16px,7vw,66px)] pt-6 pb-24 max-md:pb-12">
-      <div class="mx-auto max-w-[720px]"><slot /></div>
+      <div class="mx-auto max-w-[720px]">
+        <slot />
+      </div>
     </div>
     <BottomBar current={section} />
     <KbdWelcome />

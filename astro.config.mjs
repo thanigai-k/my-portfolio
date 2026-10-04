@@ -1,8 +1,8 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from 'astro/config'
 
-import markdoc from '@astrojs/markdoc';
-import tailwindcss from '@tailwindcss/vite';
+import markdoc from '@astrojs/markdoc'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,9 +19,9 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
   devToolbar: {
-    enabled: false
-  }
-});
+    enabled: false,
+  },
+})

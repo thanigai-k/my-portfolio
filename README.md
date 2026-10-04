@@ -13,10 +13,10 @@ Decisions and why: `docs/adr/`.
 
 ## Where things live
 
-| File | What it controls |
-|---|---|
-| `content/**/*.mdoc` | Every word on the site. |
-| `src/site.config.ts` | Name, role line, email, social links. |
+| File                    | What it controls                                                            |
+| ----------------------- | --------------------------------------------------------------------------- |
+| `content/**/*.mdoc`     | Every word on the site.                                                     |
+| `src/site.config.ts`    | Name, role line, email, social links.                                       |
 | `src/styles/global.css` | The four palettes (Dawn, Day, Dusk, Night) and the only colours that exist. |
 
 Routes: `/`, `/writing`, `/writing/[slug]`, `/work/[slug]`. Old routes redirect (`astro.config.mjs`).

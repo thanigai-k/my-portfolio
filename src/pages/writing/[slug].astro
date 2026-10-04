@@ -5,8 +5,11 @@ import { isPublished, monthYear, readMinutes } from '../../lib/content'
 
 export async function getStaticPaths() {
   // Newest first: "Previous" is the older post, "Next" the newer one.
-  const posts = (await getCollection('writing', isPublished)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  const link = (p?: CollectionEntry<'writing'>) => p && { href: `/writing/${p.id}`, title: p.data.title }
+  const posts = (await getCollection('writing', isPublished)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  )
+  const link = (p?: CollectionEntry<'writing'>) =>
+    p && { href: `/writing/${p.id}`, title: p.data.title }
   return posts.map((post, i) => ({
     params: { slug: post.id },
     props: { post, prev: link(posts[i + 1]), next: link(posts[i - 1]) },

@@ -3,10 +3,12 @@
 Date: 2026-10-04 · Status: accepted
 
 ## Context
+
 Every React island (ThemeLab, ThemeToggle, MobileTabBar, OverridePill) is removed by the redesign.
 The remaining interactions (palette bubble, keyboard welcome, /writing filter) are small.
 
 ## Decision
+
 - Drop `react`, `react-dom`, `@astrojs/react`. Interactions are vanilla `<script>`s inside the
   Astro component that owns the markup.
 - Style with **Tailwind v4 only**: utilities in markup; reuse comes from Astro components, not
@@ -23,4 +25,5 @@ The remaining interactions (palette bubble, keyboard welcome, /writing filter) a
   palette colours live only in CSS.
 
 ## Consequences
+
 No client framework; total JS is a few hundred lines of plain DOM code.
