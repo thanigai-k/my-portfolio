@@ -118,10 +118,7 @@
   --animate-cspk-2: spk-float 0.6s ease-out 0.08s both;
   --animate-cspk-3: spk-counter 0.65s ease-out 0.16s both;
   --animate-cspk-4: spk-spin 0.6s ease-out 0.24s both;
-  /* Bottom bar: link sparkle 150ms later; the pill grows in on page load. */
-  --animate-bsh-1: spk-spin 0.7s ease-out 0.15s both;
-  --animate-bsh-2: spk-float 0.6s ease-out 0.24s both;
-  --animate-bsh-3: spk-counter 0.65s ease-out 0.33s both;
+  /* Bottom bar: the pill grows in on page load. */
   --animate-pill-in: pill-in 0.36s cubic-bezier(0.34, 1.35, 0.64, 1);
 
   --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
