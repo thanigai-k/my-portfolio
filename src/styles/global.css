@@ -70,6 +70,7 @@
   --color-ink-soft: color-mix(in oklab, var(--text), var(--muted));
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-ink: color-mix(in oklab, var(--accent), var(--text));
   --color-glint: color-mix(in oklab, var(--accent), white 45%);
   --color-white: #fff;
   --color-black: #000;
@@ -88,6 +89,11 @@
   --animate-cspk-2: spk-float 0.6s ease-out 0.08s both;
   --animate-cspk-3: spk-counter 0.65s ease-out 0.16s both;
   --animate-cspk-4: spk-spin 0.6s ease-out 0.24s both;
+  /* Bottom bar: link sparkle 150ms later; the pill grows in on page load. */
+  --animate-bsh-1: spk-spin 0.7s ease-out 0.15s both;
+  --animate-bsh-2: spk-float 0.6s ease-out 0.24s both;
+  --animate-bsh-3: spk-counter 0.65s ease-out 0.33s both;
+  --animate-pill-in: pill-in 0.36s cubic-bezier(0.34, 1.35, 0.64, 1);
 
   --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
   --animate-bubble-in: bubble-in 0.22s cubic-bezier(0.2, 1.3, 0.4, 1);
@@ -109,6 +115,9 @@
     0% { opacity: 0; transform: scale(0) rotate(0); }
     50% { opacity: 1; transform: scale(1.1) rotate(-45deg); }
     100% { opacity: 0; transform: scale(0.4) rotate(-90deg); }
+  }
+  @keyframes pill-in {
+    from { scale: 0.4 1; }
   }
   @keyframes pulse-ring {
     0% { opacity: 0.6; transform: scale(0.6); }

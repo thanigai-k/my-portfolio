@@ -11,29 +11,83 @@ const items = [
   { id: 'writing', label: 'Writing', href: '/writing', icon: 'M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z' },
   { id: 'contact', label: 'Contact', href: '/#contact', icon: 'M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm-2 2 9 6 9-6' },
 ]
+const index = items.findIndex((item) => item.id === current)
 ---
 
-<!-- Phones only. Sticky at the end of <body>, so it rides the viewport bottom. -->
+<!-- Phones only. Sticky at the end of <body>, so it rides the viewport bottom.
+     One pill sits behind the current tab, placed by --i (its index); changing --i slides it. -->
 <nav
   aria-label="Primary"
+  style={`--i: ${index}`}
   class="sticky bottom-0 z-20 grid grid-cols-4 border-t border-rule bg-bg px-2 pt-1 pb-[calc(4px+env(safe-area-inset-bottom))] md:hidden"
 >
+  {
+    index >= 0 && (
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute top-1 left-[calc(8px+(var(--i)+0.5)*(100%-16px)/4-40px)] h-9 w-20 animate-pill-in rounded-full bg-accent/18 transition-[left] duration-360 ease-[cubic-bezier(.34,1.35,.64,1)] motion-reduce:animate-none motion-reduce:transition-none"
+      />
+    )
+  }
   {
     items.map((item) => (
       <a
         href={item.href}
         aria-current={item.id === current ? 'page' : undefined}
-        class="relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-xs/tight text-ink-soft no-underline active:bg-raised aria-[current=page]:font-semibold aria-[current=page]:text-ink aria-[current=page]:before:absolute aria-[current=page]:before:top-0 aria-[current=page]:before:left-1/2 aria-[current=page]:before:h-0.5 aria-[current=page]:before:w-6 aria-[current=page]:before:-translate-x-1/2 aria-[current=page]:before:rounded-sm aria-[current=page]:before:bg-ink"
+        class="group/tab relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[13px]/tight text-muted no-underline [-webkit-tap-highlight-color:transparent] focus-visible:-outline-offset-2 active:bg-accent/6 active:text-accent aria-[current=page]:font-semibold aria-[current=page]:text-accent-ink"
       >
         <svg
           viewBox="0 0 24 24"
           aria-hidden="true"
-          class="size-[22px] fill-none stroke-current stroke-[1.75] [stroke-linecap:round] [stroke-linejoin:round]"
+          class="size-[22px] fill-none stroke-current stroke-[1.75] transition-transform duration-150 [stroke-linecap:round] [stroke-linejoin:round] group-active/tab:scale-88 group-active/tab:duration-0"
         >
           <path d={item.icon} />
         </svg>
         <span>{item.label}</span>
+        {/* Shines pop above the bar edge each time this tab becomes current. */}
+        <span aria-hidden="true" class="pointer-events-none absolute -top-1 left-1/2 motion-reduce:hidden">
+          <i class="absolute -left-10 size-[13px] -translate-1/2 bg-accent opacity-0 clip-star group-aria-[current=page]/tab:animate-bsh-1" />
+          <i class="absolute left-[30px] size-[9px] -translate-1/2 bg-glint opacity-0 clip-star group-aria-[current=page]/tab:animate-bsh-2" />
+          <i class="absolute -top-[15px] -left-1.5 size-[11px] -translate-1/2 bg-accent opacity-0 clip-star group-aria-[current=page]/tab:animate-bsh-3" />
+        </span>
       </a>
     ))
   }
 </nav>
+
+<script>
+  // Projects and Contact are sections of the home page, so the server can only mark Home there.
+  // On scroll, mark the section crossing the viewport's midline (the last one at page end).
+  const nav = document.querySelector<HTMLElement>('nav[aria-label="Primary"]')!
+  const links = [...nav.querySelectorAll('a')]
+  const here = links.filter((a) => a.pathname === location.pathname)
+  const home = here.find((a) => !a.hash)
+  const spied = here.flatMap((a) => {
+    const section = a.hash ? document.querySelector<HTMLElement>(a.hash) : null
+    return section ? [{ a, section }] : []
+  })
+
+  if (home && spied.length) {
+    const update = () => {
+      const mid = innerHeight / 2
+      const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 1
+      const hit = atEnd
+        ? spied.at(-1)
+        : spied.find(({ section }) => {
+            const r = section.getBoundingClientRect()
+            return r.top <= mid && r.bottom > mid
+          })
+      const current = hit?.a ?? home
+      nav.style.setProperty('--i', String(links.indexOf(current)))
+      for (const a of links) {
+        if (a === current) a.setAttribute('aria-current', 'page')
+        else a.removeAttribute('aria-current')
+      }
+    }
+    update()
+    addEventListener('scroll', update, { passive: true })
+  }
+
+  // iOS Safari only applies :active (the pressed state) when a touchstart listener exists.
+  nav.addEventListener('touchstart', () => {}, { passive: true })
+</script>

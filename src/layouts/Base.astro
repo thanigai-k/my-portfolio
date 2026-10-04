@@ -51,13 +51,13 @@ const paletteScript = `(() => {
     <script is:inline set:html={paletteScript} />
   </head>
 
-  <body class="font-sans text-[15px]/[1.5] max-md:text-[17px]/[1.6]">
+  <body class="flex min-h-dvh flex-col font-sans text-[15px]/[1.5] max-md:text-[17px]/[1.6]">
     <a
       href="#content"
       class="absolute -top-20 left-3 z-50 rounded-md bg-ink px-4 py-3 font-semibold text-bg no-underline focus:top-3"
       >Skip to content</a
     >
-    <div class="px-[clamp(16px,7vw,66px)] pt-6 pb-24 max-md:pb-12">
+    <div class="grow px-[clamp(16px,7vw,66px)] pt-6 pb-24 max-md:pb-12">
       <div class="mx-auto max-w-[720px]"><slot /></div>
     </div>
     <BottomBar current={section} />
