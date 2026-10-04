@@ -31,9 +31,9 @@
   --accent: #f4a585;
 }
 [data-palette='night'] {
-  --bg: #0a0f1c;
-  --surface: #121a2c;
-  --rule: #24304a;
+  --bg: #05080f;
+  --surface: #0c111d;
+  --rule: #1c2538;
   --text: #e4e9f5;
   --muted: #93a0bc;
   --accent: #8fb4ff;
