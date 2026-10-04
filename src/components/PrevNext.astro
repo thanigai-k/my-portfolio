@@ -1,0 +1,80 @@
+---
+interface Link {
+  href: string
+  title: string
+}
+interface Props {
+  label: string
+  prev?: Link
+  next?: Link
+}
+const { label, prev, next } = Astro.props
+
+const card =
+  'group/card relative isolate flex flex-col gap-1.5 overflow-hidden rounded-[10px] border border-rule bg-surface/50 px-[18px] py-4 no-underline transition-[border-color,box-shadow,transform] duration-200 hover:border-accent hover:ring-3 hover:ring-accent/12 focus-visible:border-accent active:scale-[.98] active:bg-raised max-md:min-h-11 motion-reduce:transition-none motion-reduce:active:scale-100'
+const shine = 'absolute block opacity-0 clip-star'
+// Four shines spread across the card; the Next card mirrors them.
+const shines = {
+  prev: [
+    'top-2.5 left-[58%] size-3 bg-accent group-hover/card:animate-cspk-1 group-focus-visible/card:animate-cspk-1',
+    'top-3.5 right-4 size-2 bg-glint group-hover/card:animate-cspk-2 group-focus-visible/card:animate-cspk-2',
+    'bottom-3 left-[34%] size-2.5 bg-accent group-hover/card:animate-cspk-3 group-focus-visible/card:animate-cspk-3',
+    'bottom-4 right-[26%] size-[7px] bg-glint group-hover/card:animate-cspk-4 group-focus-visible/card:animate-cspk-4',
+  ],
+  next: [
+    'top-2.5 right-[58%] size-3 bg-accent group-hover/card:animate-cspk-1 group-focus-visible/card:animate-cspk-1',
+    'top-3.5 left-4 size-2 bg-glint group-hover/card:animate-cspk-2 group-focus-visible/card:animate-cspk-2',
+    'bottom-3 right-[34%] size-2.5 bg-accent group-hover/card:animate-cspk-3 group-focus-visible/card:animate-cspk-3',
+    'bottom-4 left-[26%] size-[7px] bg-glint group-hover/card:animate-cspk-4 group-focus-visible/card:animate-cspk-4',
+  ],
+}
+const arrow = 'inline-block transition-transform duration-200 motion-reduce:transition-none'
+const title =
+  'text-base/[1.35] font-semibold text-ink underline-offset-3 group-hover/card:underline'
+---
+
+<nav aria-label={label} class="grid grid-cols-2 gap-3 max-md:grid-cols-1">
+  {prev ? (
+    <a href={prev.href} class={card}>
+      <span class="meta text-muted">
+        <span aria-hidden="true" class:list={[arrow, 'group-hover/card:-translate-x-1']}>
+          ←
+        </span>{' '}
+        Previous
+      </span>
+      <span class={title}>{prev.title}</span>
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 hidden md:block motion-reduce:hidden"
+      >
+        {shines.prev.map((s) => (
+          <span class:list={[shine, s]} />
+        ))}
+      </span>
+    </a>
+  ) : (
+    <span class="max-md:hidden" />
+  )}
+  {next && (
+    <a
+      href={next.href}
+      class:list={[card, 'items-end text-right max-md:items-start max-md:text-left']}
+    >
+      <span class="meta text-muted">
+        Next{' '}
+        <span aria-hidden="true" class:list={[arrow, 'group-hover/card:translate-x-1']}>
+          →
+        </span>
+      </span>
+      <span class={title}>{next.title}</span>
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 hidden md:block motion-reduce:hidden"
+      >
+        {shines.next.map((s) => (
+          <span class:list={[shine, s]} />
+        ))}
+      </span>
+    </a>
+  )}
+</nav>

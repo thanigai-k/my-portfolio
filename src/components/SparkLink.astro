@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import Sparkle from './Sparkle.astro'
+
+type Props = HTMLAttributes<'a'> & {
+  /** Phones: grow to a 44px tap target. Leave off for links inside running text. */
+  tap?: boolean
+}
+const { tap = false, class: className, ...rest } = Astro.props
+---
+
+<a
+  class:list={[
+    'group/spk transition-colors duration-150 active:text-accent md:relative',
+    'md:hover:text-white md:hover:decoration-accent md:focus-visible:text-white md:focus-visible:decoration-accent',
+    tap && 'max-md:inline-flex max-md:min-h-11 max-md:items-center',
+    className,
+  ]}
+  {...rest}
+>
+  <Sparkle />
+  <slot />
+</a>

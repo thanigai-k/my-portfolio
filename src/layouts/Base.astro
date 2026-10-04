@@ -1,22 +1,32 @@
 ---
 import '../styles/global.css'
-import { googleFontsHref, noFlashScript, themeCss } from '../lib/theme'
-import { theme } from '../theme.config'
 import { site } from '../site.config'
-import SideRail from '../components/SideRail.astro'
-import MobileTabBar from '../components/MobileTabBar.tsx'
-import ThemeToggle from '../components/ThemeToggle.tsx'
-import OverridePill from '../components/OverridePill.tsx'
+import BottomBar, { type Section } from '../components/BottomBar.astro'
+import KbdWelcome from '../components/KbdWelcome.astro'
 
 interface Props {
   title?: string
   description?: string
-  /** `wide` for hero/case-study pages (820px), `read` for everything else. */
-  measure?: 'read' | 'wide'
+  /** Marks the current item in the phone bottom bar. */
+  section?: Section
 }
-const { title, description = site.description, measure = 'read' } = Astro.props
+const { title, description = site.description, section } = Astro.props
 const current = Astro.url.pathname.replace(/(.)\/$/, '$1')
-const column = measure === 'wide' ? 'var(--layout-wideColumn)' : 'var(--layout-readColumn)'
+
+// Runs before first paint: picks the palette from the local hour (or the visit's lock) and
+// exposes it as attributes PalettePicker's CSS reads. Single source of the schedule.
+const paletteScript = `(() => {
+  const h = new Date().getHours()
+  const auto = h < 5 ? 'night' : h < 8 ? 'dawn' : h < 17 ? 'day' : h < 20 ? 'dusk' : 'night'
+  let lock = null
+  try { lock = sessionStorage.getItem('palette') } catch {}
+  if (!/^(dawn|day|dusk|night)$/.test(lock)) lock = null
+  const r = document.documentElement
+  r.dataset.auto = auto
+  r.dataset.palette = lock || auto
+  r.toggleAttribute('data-palette-lock', !!lock)
+  r.style.setProperty('--hour-pct', ((h + 0.5) / 24) * 100 + '%')
+})()`
 ---
 
 <!doctype html>
@@ -24,51 +34,36 @@ const column = measure === 'wide' ? 'var(--layout-wideColumn)' : 'var(--layout-r
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
     <title>{title ? `${title} — ${site.name}` : site.title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(current, site.url)} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:title" content={title ?? site.title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={googleFontsHref(theme.fonts)} id="google-fonts" />
-    <style is:global set:html={themeCss(theme)}></style>
-    <script is:inline set:html={noFlashScript}></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+    />
+    <script is:inline set:html={paletteScript} />
   </head>
 
-  <body>
+  <body class="flex min-h-dvh flex-col font-sans text-[15px]/[1.5] max-md:text-[17px]/[1.6]">
     <a
-      href="#main"
-      class="type-meta sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-panel focus:px-3 focus:py-2"
-      >Skip to content</a
+      href="#content"
+      class="absolute -top-20 left-3 z-50 rounded-md bg-ink px-4 py-3 font-semibold text-bg no-underline focus:top-3"
     >
-
-    <!-- flow-root: stops the first child's top margin collapsing out and
-         dragging the absolutely-positioned rail down with it. -->
-    <div class="relative flow-root pb-[72px]">
-      <SideRail current={current} />
-
-      <div
-        class="absolute right-[var(--layout-pagePadding)] top-6 z-30 flex items-center gap-1 lg:top-9"
-      >
-        <a
-          href="/design"
-          class="type-meta rounded-control px-2 py-1.5 text-muted2 no-underline transition-colors duration-[var(--motion-fast)] hover:text-ink"
-          >design</a
-        >
-        <ThemeToggle client:load />
-      </div>
-
-      <main
-        id="main"
-        class="mx-auto px-[var(--layout-pagePadding)] pb-32 lg:pb-0 max-w-5xl"
-      >
+      Skip to content
+    </a>
+    <div class="grow px-[clamp(16px,7vw,66px)] pt-6 pb-24 max-md:pb-12">
+      <div class="mx-auto max-w-[720px]">
         <slot />
-      </main>
+      </div>
     </div>
-
-    <MobileTabBar current={current} client:load />
-    <OverridePill client:idle />
+    <BottomBar current={section} />
+    <KbdWelcome />
   </body>
 </html>

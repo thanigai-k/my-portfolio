@@ -1,0 +1,36 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import Post from '../../layouts/Post.astro'
+import { isPublished, monthYear, readMinutes } from '../../lib/content'
+
+export async function getStaticPaths() {
+  // Newest first: "Previous" is the older post, "Next" the newer one.
+  const posts = (await getCollection('writing', isPublished)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  )
+  const link = (p?: CollectionEntry<'writing'>) =>
+    p && { href: `/writing/${p.id}`, title: p.data.title }
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, prev: link(posts[i + 1]), next: link(posts[i - 1]) },
+  }))
+}
+
+const { post, prev, next } = Astro.props
+const { data } = post
+const { Content } = await render(post)
+---
+
+<Post
+  title={data.title}
+  summary={data.summary}
+  kicker={`${data.topic} · ${readMinutes(post.body)} min · ${monthYear(data.date)}`}
+  crumb={{ href: '/writing', title: 'Writing' }}
+  section="writing"
+  hero={{ image: data.hero, tldr: data.tldr }}
+  prevNextLabel="More posts"
+  prev={prev}
+  next={next}
+>
+  <Content />
+</Post>
