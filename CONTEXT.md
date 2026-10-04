@@ -16,7 +16,7 @@ design canvas (https://claude.ai/artifact/CBPKwqEqL9d1meWaaK4tsJ). Decisions: `d
 | **Accent**           | The current palette's accent. Drives sparkles, focus ring, hover underline.                                           |
 | **Glint**            | Lighter mix of the accent; the second sparkle colour.                                                                 |
 | **Tagline**          | A project's short one-liner on Home ("Name - Verb tagline"); the verb comes from its Role.                            |
-| **Role**             | A project's `role` (founder, lead, contributor). Sets the tagline's verb and the Home › Projects filter.              |
+| **Role**             | A project's `role` (founder, lead, contributor). Sets the tagline's verb; shown in the hover card.                    |
 | **Hover card**       | Desktop-only card that opens right of a project name on hover/focus: name, role, summary.                             |
 | **Topic**            | A post's single subject (React, Accessibility…). Drives the /writing filter.                                          |
 | **Hook**             | The muted line under a post title in lists. Same as the post's `summary`.                                             |

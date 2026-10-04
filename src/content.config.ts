@@ -28,7 +28,7 @@ const projects = defineCollection({
   loader: mdoc('projects'),
   schema: z.object({
     title: z.string(),
-    /** Drives the Home filter, the hover card, and the verb before the tagline (`roleVerb`). */
+    /** Shown in the hover card and as the verb before the tagline (`roleVerb`). */
     role: z.enum(['founder', 'lead', 'contributor']),
     /** Short one-liner on Home: "Name - Verb tagline". Starts lowercase; it follows the verb. */
     tagline: z.string(),
