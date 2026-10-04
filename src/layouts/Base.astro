@@ -58,7 +58,7 @@ const paletteScript = `(() => {
       >Skip to content</a
     >
     <div class="px-[clamp(16px,7vw,66px)] pt-6 pb-24 max-md:pb-12">
-      <slot />
+      <div class="mx-auto max-w-[720px]"><slot /></div>
     </div>
     <BottomBar current={section} />
     <KbdWelcome />
