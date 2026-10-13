@@ -21,7 +21,6 @@ Consult these guides before working on related tasks:
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
 
-
 ## Project Structure
 
 ```
@@ -35,5 +34,5 @@ Consult these guides before working on related tasks:
 ├── astro.config.mjs        # Astro configuration file
 ├── package.json            # Project metadata and dependencies
 ├── tailwind.config.cjs     # Tailwind CSS configuration
-└── tsconfig.json           # TypeScript configuration  
+└── tsconfig.json           # TypeScript configuration
 ```

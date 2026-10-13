@@ -1,185 +1,268 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
-/* Tailwind utilities aliased onto the tokens emitted from src/theme.config.ts.
-   Nothing here holds a value — it only names them. */
+/* ── Palettes (docs/adr/0002) ─────────────────────────────────────────────
+   Six tokens per time of day. The <head> script in Base.astro sets
+   data-palette on <html>; a swatch can set it on itself to preview another
+   palette. `:root` doubles as Day so the page is styled before the script. */
+:root,
+[data-palette='day'] {
+  --bg: #2b2b2e;
+  --surface: #353539;
+  --rule: #47474d;
+  --text: #f2f2f4;
+  --muted: #b0b1b8;
+  --accent: #a9c8ff;
+}
+[data-palette='dawn'] {
+  --bg: #2b211a;
+  --surface: #36291f;
+  --rule: #4a392b;
+  --text: #f5eadf;
+  --muted: #bba694;
+  --accent: #f2b58a;
+}
+[data-palette='dusk'] {
+  --bg: #2a1a26;
+  --surface: #352230;
+  --rule: #4a3343;
+  --text: #f6e9f0;
+  --muted: #c0a6b4;
+  --accent: #f4a585;
+}
+[data-palette='night'] {
+  --bg: #05080f;
+  --surface: #0c111d;
+  --rule: #1c2538;
+  --text: #e4e9f5;
+  --muted: #93a0bc;
+  --accent: #8fb4ff;
+}
+
+/* Registered so switching palettes can fade every colour from one rule. */
+@property --bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #2b2b2e;
+}
+@property --surface {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #353539;
+}
+@property --rule {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #47474d;
+}
+@property --text {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f2f2f4;
+}
+@property --muted {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #b0b1b8;
+}
+@property --accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #a9c8ff;
+}
+
+:root {
+  transition:
+    --bg 0.6s ease,
+    --surface 0.6s ease,
+    --rule 0.6s ease,
+    --text 0.6s ease,
+    --muted 0.6s ease,
+    --accent 0.6s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
+
+/* Only these colours exist. Extra shades from the mockup derive from the six tokens. */
 @theme inline {
+  --color-*: initial;
   --color-bg: var(--bg);
-  --color-ink: var(--ink);
-  --color-ink2: var(--ink2);
-  --color-muted: var(--muted);
-  --color-muted2: var(--muted2);
+  --color-surface: var(--surface);
+  --color-raised: color-mix(in oklab, var(--surface), var(--text) 5%);
   --color-rule: var(--rule);
-  --color-rule2: var(--rule2);
-  --color-panel: var(--panel);
+  --color-line: color-mix(in oklab, var(--rule) 65%, var(--bg));
+  --color-edge: color-mix(in oklab, var(--text) 38%, var(--bg));
+  --color-ink: var(--text);
+  --color-ink-soft: color-mix(in oklab, var(--text), var(--muted));
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: color-mix(in oklab, var(--accent), var(--text));
+  --color-glint: color-mix(in oklab, var(--accent), white 45%);
+  --color-white: #fff;
+  --color-black: #000;
+}
 
-  --font-heading: var(--ff-heading);
-  --font-body: var(--ff-body);
-  --font-meta: var(--ff-meta);
+@theme {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
 
-  --radius-card: var(--r-card);
-  --radius-sheet: var(--r-sheet);
-  --radius-control: var(--r-control);
+  /* Link sparkle: three shines, staggered 0 / 90 / 180ms. */
+  --animate-spk-1: spk-spin 0.7s ease-out both;
+  --animate-spk-2: spk-float 0.6s ease-out 0.09s both;
+  --animate-spk-3: spk-counter 0.65s ease-out 0.18s both;
+  /* Card sparkle: four shines, staggered 80ms. */
+  --animate-cspk-1: spk-spin 0.7s ease-out both;
+  --animate-cspk-2: spk-float 0.6s ease-out 0.08s both;
+  --animate-cspk-3: spk-counter 0.65s ease-out 0.16s both;
+  --animate-cspk-4: spk-spin 0.6s ease-out 0.24s both;
+  /* Bottom bar: the pill grows in on page load. */
+  --animate-pill-in: pill-in 0.36s cubic-bezier(0.34, 1.35, 0.64, 1);
+
+  --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
+  --animate-bubble-in: bubble-in 0.22s cubic-bezier(0.2, 1.3, 0.4, 1);
+  --animate-row-in: row-in 0.2s ease-out both;
+  --animate-toast-in: toast-in 0.25s ease-out;
+  --animate-countdown: countdown 6s linear forwards;
+
+  @keyframes spk-spin {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotate(0);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(1.25) rotate(60deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.5) rotate(120deg);
+    }
+  }
+  @keyframes spk-float {
+    0% {
+      opacity: 0;
+      transform: translateY(3px) scale(0);
+    }
+    40% {
+      opacity: 1;
+      transform: translateY(-2px) scale(1.3);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.4);
+    }
+  }
+  @keyframes spk-counter {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotate(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1) rotate(-45deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.4) rotate(-90deg);
+    }
+  }
+  @keyframes pill-in {
+    from {
+      scale: 0.4 1;
+    }
+  }
+  @keyframes pulse-ring {
+    0% {
+      opacity: 0.6;
+      transform: scale(0.6);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+  @keyframes bubble-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+  }
+  @keyframes row-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes countdown {
+    to {
+      transform: scaleX(0);
+    }
+  }
+}
+
+/* 4-point shine used by every sparkle. */
+@utility clip-star {
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+
+/* Dates, labels, counts: mono 12px, never under 13px on phones. */
+@utility meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  @variant max-md {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Typography plugin colours → palette tokens (raw vars: `@theme inline` colours aren't emitted). */
+@utility prose-palette {
+  --tw-prose-body: var(--text);
+  --tw-prose-headings: var(--text);
+  --tw-prose-lead: color-mix(in oklab, var(--text), var(--muted));
+  --tw-prose-links: var(--text);
+  --tw-prose-bold: var(--text);
+  --tw-prose-counters: var(--muted);
+  --tw-prose-bullets: var(--muted);
+  --tw-prose-hr: var(--rule);
+  --tw-prose-quotes: var(--text);
+  --tw-prose-quote-borders: var(--muted);
+  --tw-prose-captions: var(--muted);
+  --tw-prose-kbd: var(--text);
+  --tw-prose-code: var(--text);
+  --tw-prose-pre-code: color-mix(in oklab, var(--text), var(--muted));
+  --tw-prose-pre-bg: color-mix(in oklab, var(--surface), var(--text) 5%);
+  --tw-prose-th-borders: var(--rule);
+  --tw-prose-td-borders: var(--rule);
 }
 
 @layer base {
   html {
+    background: var(--bg);
+    color: var(--text);
     -webkit-text-size-adjust: 100%;
   }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--ff-body);
-    font-size: var(--t-body-size);
-    line-height: var(--t-body-line);
-    font-weight: var(--t-body-weight);
-    transition: background var(--motion-fast), color var(--motion-fast);
-  }
   a {
-    color: inherit;
-  }
-  code {
-    font-family: var(--ff-meta);
-    font-size: 0.9em;
-    background: var(--panel);
-    border-radius: 3px;
-    padding: 0.15em 0.4em;
-    margin-inline: 0.15em;
-  }
-  ::selection {
-    background: var(--ink);
-    color: var(--bg);
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklab, var(--text) 38%, var(--bg));
+    text-underline-offset: 3px;
   }
   :focus-visible {
-    outline: 2px solid var(--ink);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
+    border-radius: 3px;
   }
-}
-
-/* Prose rendered from .mdoc — inherits the same tokens. */
-.prose > * + * {
-  margin-top: 1.1em;
-}
-.prose p,
-.prose li {
-  font-family: var(--t-prose-font);
-  font-size: var(--t-prose-size);
-  line-height: var(--t-prose-line);
-  font-weight: var(--t-prose-weight);
-  color: var(--ink2);
-}
-.prose h2 {
-  font-family: var(--t-label-font);
-  font-size: var(--t-label-size);
-  font-weight: var(--t-label-weight);
-  letter-spacing: var(--t-label-track);
-  text-transform: uppercase;
-  color: var(--muted2);
-  margin-top: 2.6em;
-  margin-bottom: 0.6em;
-}
-.prose h3 {
-  font-family: var(--t-h3-font);
-  font-size: var(--t-h3-size);
-  line-height: var(--t-h3-line);
-  font-weight: var(--t-h3-weight);
-  color: var(--ink);
-}
-.prose ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45em;
-}
-/* Hanging em-dash marker, as in the mockup — wrapped lines align with the
-   text, not under the dash. Positioned rather than flexed, so inline <strong>
-   and <a> stay in the text flow. */
-.prose li {
-  position: relative;
-  padding-left: 1.45em;
-}
-.prose li::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: var(--muted2);
-}
-
-/* Denser variant for bullets nested inside a row (experience accordion,
-   project cards) — body scale instead of prose scale. */
-.prose-tight p,
-.prose-tight li {
-  font-size: var(--t-body-size);
-  line-height: var(--t-body-line);
-  font-weight: var(--t-body-weight);
-}
-.prose-tight > * + * {
-  margin-top: 0.8em;
-}
-.prose-tight ul {
-  gap: 7px;
-}
-/* Secondary prose — for body that sits under a lead paragraph. */
-.prose-muted p,
-.prose-muted li {
-  color: var(--muted);
-}
-.prose strong {
-  font-weight: 500;
-  color: var(--ink);
-}
-.prose a {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 0.5px;
-}
-.prose img {
-  display: block;
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  margin-inline: auto;
-  border-radius: var(--r-card);
-}
-
-/* ── Figures ──────────────────────────────────────────────────────────────
-   Case-study images and video break OUT of the 640px reading column and sit
-   centred on it, with real air above and below (--figure-space) instead of
-   the 1.1em that separates paragraphs. Under 1200px there is nothing to
-   break out into, so they just fill the column. */
-.figure-wide {
-  --figure-width: 100%;
-  width: var(--figure-width);
-  margin-left: calc(50% - var(--figure-width) / 2);
-}
-@media (min-width: 1200px) {
-  .figure-wide {
-    --figure-width: min(1200px, calc(100vw - 2 * var(--layout-pagePadding)));
-  }
-}
-
-.prose {
-  --figure-space: 4rem;
-}
-/* Markdoc renders a lone `![alt](path)` as <p><img></p>. */
-.prose p:has(> img:only-child) {
-  width: var(--figure-width, 100%);
-  margin-left: calc(50% - var(--figure-width, 100%) / 2);
-  margin-top: var(--figure-space);
-  margin-bottom: var(--figure-space);
-}
-@media (min-width: 1200px) {
-  .prose p:has(> img:only-child) {
-    --figure-width: min(1200px, calc(100vw - 2 * var(--layout-pagePadding)));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
   }
 }

@@ -1,0 +1,2 @@
+#!/bin/sh
+pnpm -s lint && pnpm -s format:check
