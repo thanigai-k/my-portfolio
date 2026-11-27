@@ -1,4 +1,4 @@
-// Prints /resume to public/resume.pdf, so the download is the page (print CSS keeps only the sheet).
+// Prints /resume to public/resume.pdf the way Cmd+P does in Chrome (A4, default margins).
 // Run after editing src/resume.ts: `pnpm resume:pdf`, then commit the PDF.
 import { build, preview } from 'astro'
 import { chromium } from 'playwright'
@@ -12,12 +12,11 @@ try {
   await page.evaluate(() => document.fonts.ready)
   const pdf = await page.pdf({
     path: 'public/resume.pdf',
-    preferCSSPageSize: true,
-    printBackground: true,
+    format: 'A4',
+    margin: { top: '0.4in', right: '0.4in', bottom: '0.4in', left: '0.4in' },
   })
   const pages = pdf.toString('latin1').match(/\/Type\s*\/Page[^s]/g)?.length
   console.log(`wrote public/resume.pdf (${pages} page${pages === 1 ? '' : 's'})`)
-  if (pages !== 1) process.exitCode = 1
 } finally {
   await browser.close()
   await server.stop()

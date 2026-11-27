@@ -1,0 +1,33 @@
+---
+// Port of DesignModeToolbar from github.com/thanigai-k/resume: toggles document.designMode so the
+// page can be edited in place before printing. Rendered in dev only.
+---
+
+<div class="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full border border-black/10 bg-white px-3 py-2 shadow-lg print:hidden">
+  <span class="flex items-center gap-2 pl-1 text-[0.75rem]/[1.5] tracking-wide text-black/60 uppercase">
+    <span data-dot class="h-2 w-2 rounded-full bg-black/30"></span>
+    <span data-label>Design mode off</span>
+  </span>
+  <button
+    type="button"
+    data-toggle
+    class="cursor-default rounded-full bg-black px-5 py-2 text-[0.75rem]/[1.5] font-medium text-white select-none hover:bg-black/80 active:bg-black/90"
+  >
+    Turn on
+  </button>
+</div>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-toggle]')!
+  const dot = document.querySelector<HTMLElement>('[data-dot]')!
+  const label = document.querySelector<HTMLElement>('[data-label]')!
+  let on = false
+  btn.addEventListener('click', () => {
+    on = !on
+    document.designMode = on ? 'on' : 'off'
+    label.textContent = `Design mode ${on ? 'on' : 'off'}`
+    btn.textContent = `Turn ${on ? 'off' : 'on'}`
+    dot.classList.toggle('bg-[#22c55e]', on)
+    dot.classList.toggle('bg-black/30', !on)
+  })
+</script>

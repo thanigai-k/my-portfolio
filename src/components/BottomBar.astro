@@ -39,7 +39,7 @@ const index = items.findIndex((item) => item.id === current)
 <nav
   aria-label="Primary"
   style={`--i: ${index}`}
-  class="sticky bottom-0 z-20 grid grid-cols-4 border-t border-rule bg-bg px-2 pt-1 pb-[calc(4px+env(safe-area-inset-bottom))] md:hidden"
+  class="sticky bottom-0 z-20 grid grid-cols-4 border-t border-rule bg-bg px-2 pt-1 pb-[calc(4px+env(safe-area-inset-bottom))] md:hidden print:hidden"
 >
   {index >= 0 && (
     <span
