@@ -141,7 +141,7 @@ const dev = import.meta.env.DEV
                     </h4>
                     <ul class:list={[list, 'gap-[.5em] max-md:gap-[.45em]']}>
                       {role.impacts.map((i) => (
-                        <li>{i}</li>
+                        <li set:html={i} />
                       ))}
                     </ul>
                   </div>
