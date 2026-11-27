@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
-    "prepare": "git config core.hooksPath .githooks"
+    "prepare": "git config core.hooksPath .githooks",
+    "resume:pdf": "node scripts/resume-pdf.mjs"
   },
   "dependencies": {
     "@astrojs/markdoc": "^2.0.6",

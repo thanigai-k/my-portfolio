@@ -122,9 +122,14 @@ const h2 = 'text-xl font-bold max-md:text-[22px]'
       aria-labelledby="experience-h"
       class="flex scroll-mt-4 flex-col gap-[18px]"
     >
-      <h2 id="experience-h" class={h2}>
-        Experience
-      </h2>
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 id="experience-h" class={h2}>
+          Experience
+        </h2>
+        <SparkLink tap href="/resume" class="text-muted">
+          View CV →
+        </SparkLink>
+      </div>
       <ExperienceList entries={experiences} />
     </section>
 
