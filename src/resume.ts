@@ -16,14 +16,14 @@ export const resume = {
     { icon: 'globe', label: 'Visit my site', href: 'https://thanigai.vercel.app' },
   ],
   profile:
-    'Senior front-end engineer, 7+ years. I lead Earth Design System, a React design system AI agents can read, use and help maintain, and I modernise legacy systems without stopping the business: +40% sign-ups, performance scores 30–40 → 85–95, ~40 engineers trained.',
+    "I've always felt great when I make another engineer's job easier, and these days that engineer is sometimes an AI agent. Over seven years, I've rebuilt old software while the business kept running and taught engineers to build the screens customers use. Now I lead Earth Design System, the toolkit our teams build products with.",
   company: { name: 'Full Creative', location: 'Chennai, India', span: '2018 — Present · 7 yrs' },
   roles: [
     {
       title: 'Sr. Frontend Engineer · Design System Lead',
       dates: '2023 - Present',
       impacts: [
-        'Leading <a href="https://earth.anywhere.co">Earth Design System</a>: 15–20 accessible components (roving focus, typeahead, smart popovers), each shaped by design, dev and market audits before code.',
+        'Leading <a href="https://earth.anywhere.co">Earth Design System</a>: 80+ accessible components, each shaped by design, dev and market audits before code.',
         "Automated the design system's day-to-day work through a component factory, letting a handful of engineers do what used to need a full team (~80% less manual effort).",
         "Introduced the org's first monorepo and moved every engineer into it, using Turborepo or Nx per use case; shared context lifted productivity ~30–40%.",
         'Build MCP servers and CLIs that let AI coding agents use internal tools, as with Earth Design System, plus llms.txt, Markdown docs and an agent-published Figma library.',

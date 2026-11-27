@@ -4,22 +4,33 @@ import SparkLink from '../components/SparkLink.astro'
 import Sparkle from '../components/Sparkle.astro'
 import { site } from '../site.config'
 import { resume as r } from '../resume'
+import DesignMode from '../components/DesignMode.astro'
 
-// Desktop: a true-scale A4 sheet. Every size is in em of one base that tracks the sheet width
-// (12px at 794px = 1.5113cqw), so the preview is the PDF, scaled. Phones (max-md): it reflows.
-const icons: Record<string, string> = {
-  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
-  phone:
-    '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
-  linkedin:
-    '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V17M8 7.5v.01M12 17v-6.5M12 13.5a2.5 2.5 0 0 1 5 0V17"/>',
-  globe:
-    '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+// Straight port of github.com/thanigai-k/resume (src/pages/resume.tsx): same markup, sizes and
+// print rules, so Cmd+P from this page prints exactly like the original. Tailwind v3 tokens are
+// spelled as arbitrary values (body-12px = 0.75rem/1.5, primary = black/80, secondary = black/60).
+// Icons are the react-icons the original used (HiMail, HiPhone, FaLinkedin, HiGlobe), inlined.
+const icons: Record<string, { box: string; d: string }> = {
+  mail: {
+    box: '0 0 20 20',
+    d: 'M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884zM18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z',
+  },
+  phone: {
+    box: '0 0 20 20',
+    d: 'M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z',
+  },
+  linkedin: {
+    box: '0 0 448 512',
+    d: 'M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z',
+  },
+  globe: {
+    box: '0 0 20 20',
+    d: 'M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z',
+  },
 }
-const h =
-  'text-[1.5em]/[1.5] font-bold text-black tracking-[.178em] uppercase pb-[.111em] border-b-[.111em] border-black mb-[.444em] max-md:text-[1.06em] max-md:tracking-[.15em]'
-const list = 'list-disc pl-[1em] flex flex-col max-md:pl-[1.1em]'
-const tapLink = 'max-md:inline-flex max-md:min-h-11 max-md:items-center'
+const h2 =
+  'text-black relative text-[1.125rem]/[1.5] font-bold mb-2 tracking-[0.2rem] uppercase pb-0.5 border-b-2 border-black'
+const h3 = 'text-black text-[1rem]/[1.2] flex items-center gap-1 mb-2'
 const dev = import.meta.env.DEV
 ---
 
@@ -31,16 +42,16 @@ const dev = import.meta.env.DEV
   <link
     slot="head"
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
   />
-  <main id="content" class="flex flex-col gap-6">
+  <div id="content" class="flex flex-col gap-6">
     <header class="flex flex-col gap-4 print:hidden">
       <SparkLink tap href="/" class="meta self-start text-[13px] text-muted no-underline">
         ← {site.name}
       </SparkLink>
       <div class="flex flex-col gap-1.5">
-        <h1 class="text-2xl/tight font-bold">Resume</h1>
-        <p class="text-muted">A one-page summary of my work. Read it here or download the PDF.</p>
+        <p class="text-2xl/tight font-bold">Resume</p>
+        <p class="text-muted">A summary of my work. Read it here, print it, or download the PDF.</p>
       </div>
     </header>
 
@@ -64,98 +75,91 @@ const dev = import.meta.env.DEV
         </svg>
         Download PDF
       </a>
-      <span class="meta text-muted">PDF · A4 · 1 page · Updated {r.updated}</span>
+      <span class="meta text-muted">PDF · A4 · Updated {r.updated}</span>
     </div>
 
-    {dev && (
-      <p class="meta text-accent print:hidden">
-        Owner preview · localhost only, never on the live site. Edits here are temporary; save them
-        in src/resume.ts.
-      </p>
-    )}
+    {dev && <DesignMode />}
 
-    <figure class="m-0 box-border flex max-w-[812px] flex-col gap-2.5 rounded-[10px] border border-line bg-surface p-2 max-md:border-0 max-md:bg-transparent max-md:p-0 min-[944px]:-mx-[46px] print:m-0 print:max-w-none print:rounded-none print:border-0 print:bg-transparent print:p-0">
-      <div class="@container relative">
-        <article
-          data-sheet
-          aria-label={`Resume of ${r.name}`}
-          spellcheck="false"
-          class="relative box-border aspect-[210/297] w-full rounded-[3px] bg-white p-[3.333em] font-['Poppins',system-ui,sans-serif] text-[1.5113cqw]/[1.375] tracking-[.01em] text-black/80 caret-black shadow-[0_1px_2px_rgb(0_0_0/.4),0_14px_36px_rgb(0_0_0/.35)] outline-offset-4 outline-accent data-editing:outline-2 data-editing:outline-dashed max-md:aspect-auto max-md:rounded-lg max-md:px-4 max-md:pt-[22px] max-md:pb-[26px] max-md:text-[17px]/[1.55] print:w-[210mm] print:rounded-none print:text-[12px] print:shadow-none print:outline-none [print-color-adjust:exact] [&_a]:decoration-current [&_a]:decoration-1 [&_a]:underline-offset-2 [&_a:focus-visible]:outline-black"
-        >
-          <header class="mb-[.5em] flex items-start justify-between gap-[1.333em] max-md:flex-col max-md:items-stretch max-md:gap-3">
-            <div class="min-w-0 flex-auto">
-              <h2 class="text-[2.5em]/[1.25] font-medium tracking-[.1em] uppercase max-md:text-[1.45em] max-md:tracking-[.08em]">
+    <div class="overflow-x-auto min-[868px]:-mx-6 print:overflow-visible">
+      <main class="mx-auto my-10 max-w-[768px] border-4 border-black bg-white p-8 font-['Poppins',sans-serif] text-[0.75rem] leading-snug text-black/80 [@media_screen]:min-w-[700px] print:border-0 print:p-0 [&_a]:decoration-current [&_a]:decoration-1 [&_a]:underline-offset-auto">
+        <section class="flex items-start justify-between text-[0.75rem]/[1.5]">
+          <div class="basis-8/12">
+            <h1>
+              <div class="text-3xl leading-tight font-medium tracking-widest uppercase">
                 {r.name}
-              </h2>
-              <p class="text-[1.333em]/[1.2] font-medium max-md:mt-0.5 max-md:text-[1.06em]/[1.35]">
-                {r.title}
-              </p>
-            </div>
-            <ul class="flex flex-none flex-col gap-[.333em] max-md:gap-0">
-              {r.contact.map((c) => (
-                <li class="flex items-center justify-end gap-[.667em] max-md:justify-start max-md:border-t max-md:border-[#ECECEC]">
-                  <a
-                    href={c.href}
-                    class="py-[.333em] max-md:inline-flex max-md:min-h-11 max-md:items-center max-md:py-0"
-                  >
-                    {c.label}
-                  </a>
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    class="size-[1.5em] flex-none fill-none stroke-black stroke-[1.75] [stroke-linecap:round] [stroke-linejoin:round] max-md:order-first"
-                    set:html={icons[c.icon]}
-                  />
-                </li>
-              ))}
-            </ul>
-          </header>
-
-          <section>
-            <h3 class={h}>Profile</h3>
-            <p>{r.profile}</p>
-          </section>
-
-          <div class="mt-[1em] flex justify-between max-md:flex-col max-md:gap-[1.2em]">
-            <section class="min-w-0 flex-[0_0_66.667%] max-md:w-full max-md:flex-none">
-              <h3 class={h}>Work Experience</h3>
-              <div class="mb-[.667em] flex items-center justify-between gap-[1em] max-md:flex-wrap max-md:items-baseline max-md:gap-x-3 max-md:gap-y-0">
-                <div>
-                  <div class="text-[1.5em]/[1.5] font-medium text-black max-md:text-[1.12em]">
-                    {r.company.name}
-                  </div>
-                  <div class="text-black/60 max-md:text-[15px]">{r.company.location}</div>
-                </div>
-                <div class="whitespace-nowrap text-black/60 max-md:text-[15px]">
-                  {r.company.span}
-                </div>
               </div>
-              <div class="flex flex-col gap-[1em] border-l-[.167em] border-[#E5E7EB] pl-[1.333em] max-md:gap-[1.1em] max-md:pl-[.8em]">
-                {r.roles.map((role) => (
+              <div class="text-[1rem]/[1.2] font-medium">{r.title}</div>
+            </h1>
+          </div>
+
+          <ul class="basis-3/12 space-y-1">
+            {r.contact.map((c) => (
+              <li class="flex items-center justify-end gap-2">
+                <a
+                  href={c.href}
+                  class="py-1"
+                  {...(c.icon === 'globe' ? { target: '_blank', rel: 'noreferrer' } : {})}
+                >
+                  {c.label}
+                </a>
+                <svg
+                  viewBox={icons[c.icon].box}
+                  fill="currentColor"
+                  aria-hidden="true"
+                  width="20"
+                  height="20"
+                  class="flex-none"
+                >
+                  <path fill-rule="evenodd" d={icons[c.icon].d} />
+                </svg>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h2 class={h2}>Profile</h2>
+          <div class="space-y-2">
+            <p>{r.profile}</p>
+          </div>
+        </section>
+        <div class="mb-3"></div>
+        <section class="flex justify-between">
+          <article class="basis-8/12">
+            <h2 class={h2}>Work Experience</h2>
+            <div class="mb-2 flex items-center justify-between">
+              <div>
+                <div class="text-[1.125rem]/[1.5] font-medium text-black">{r.company.name}</div>
+                <div class="text-black/60">{r.company.location}</div>
+              </div>
+              <div class="text-black/60">{r.company.span}</div>
+            </div>
+            <div class="space-y-3 border-s-2 border-[#e5e7eb] ps-4">
+              {r.roles.map((role) => (
+                <div class="space-y-1">
                   <div>
-                    <h4 class="mb-[.5em] flex items-center gap-[.25em] text-[1.333em]/[1.2] text-black max-md:flex-wrap max-md:items-baseline max-md:text-[1em]/[1.35]">
-                      <span class="font-medium">{role.title}</span>
-                      <span class="ml-auto text-[.75em] whitespace-nowrap text-black/60 max-md:ml-0 max-md:w-full max-md:text-[13px]">
+                    <h3 class={h3}>
+                      <span class="font-medium">{role.title} </span>
+                      <span class="ms-auto text-[0.75rem]/[1.5] font-normal text-black/60">
                         {role.dates}
                       </span>
-                    </h4>
-                    <ul class:list={[list, 'gap-[.5em] max-md:gap-[.45em]']}>
+                    </h3>
+                  </div>
+                  <div>
+                    <ul class="list-disc space-y-1.5 ps-3">
                       {role.impacts.map((i) => (
                         <li set:html={i} />
                       ))}
                     </ul>
                   </div>
-                ))}
-              </div>
-            </section>
-
-            <aside
-              aria-label="Education, projects and skills"
-              class="min-w-0 flex-[0_0_25%] max-md:w-full max-md:flex-none"
-            >
-              <h3 class={h}>Education</h3>
+                </div>
+              ))}
+            </div>
+          </article>
+          <article class="basis-3/12">
+            <h2 class={h2}>Education</h2>
+            <div class="space-y-1">
               {r.education.map((e) => (
-                <div class="flex flex-col gap-[.333em]">
+                <div>
                   <p class="font-medium">
                     {e.title} ({e.years})
                   </p>
@@ -165,131 +169,36 @@ const dev = import.meta.env.DEV
                   </div>
                 </div>
               ))}
-              <div class="h-[1em]"></div>
-              <h3 class={h}>Projects</h3>
-              <ul class:list={[list, 'gap-[.167em]']}>
-                {r.projects.map((p) => (
-                  <li>
-                    <a href={p.href} class={tapLink}>
-                      {p.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <div class="h-[1em]"></div>
-              <h3 class={h}>Skills</h3>
-              <ul class:list={[list, 'gap-[.167em]']}>
-                {r.skills.map((s) => (
-                  <li>{s}</li>
-                ))}
-              </ul>
-            </aside>
-          </div>
-        </article>
-        {dev && (
-          <div
-            data-page-edge
-            aria-hidden="true"
-            class="pointer-events-none absolute top-0 left-0 z-[2] box-border aspect-[210/297] w-full border-b-2 border-dashed border-accent max-md:hidden print:hidden"
-          >
-            <span class="meta absolute right-2.5 bottom-1.5 rounded border border-rule bg-raised px-1.5 text-[11px] text-accent">
-              A4 · end of page 1
-            </span>
-          </div>
-        )}
-      </div>
-      <figcaption class="meta px-1.5 pb-0.5 text-muted print:hidden">
-        <span class="max-md:hidden">
-          Preview of the PDF at true scale. What you see here is what you download.
-        </span>
-        <span class="md:hidden">Reflowed for your phone. The PDF keeps the one-page layout.</span>
-      </figcaption>
-    </figure>
-
-    {dev && (
-      <div
-        data-devbar
-        role="toolbar"
-        aria-label="Resume preview tools (local only)"
-        class="sticky bottom-5 z-[6] flex flex-wrap items-center gap-x-3 gap-y-2 self-start rounded-full border border-rule bg-raised py-1.5 pr-1.5 pl-4 shadow-[0_12px_32px_rgb(0_0_0/0.45)] max-md:hidden print:hidden"
-      >
-        <span data-fit class="meta rounded-full border border-rule px-2 py-0.5" aria-live="polite">
-          Checking fit…
-        </span>
-        <button
-          type="button"
-          data-toggle-edge
-          aria-pressed="true"
-          class="inline-flex min-h-9 cursor-pointer items-center rounded-full border border-rule px-3.5 text-[13px] font-semibold hover:border-edge aria-pressed:border-accent/40 aria-pressed:bg-accent/14 aria-pressed:text-accent-ink"
-        >
-          Page edge
-        </button>
-        <button
-          type="button"
-          data-toggle-edit
-          aria-pressed="false"
-          class="inline-flex min-h-9 cursor-pointer items-center rounded-full border border-ink bg-ink px-3.5 text-[13px] font-semibold text-bg hover:bg-white aria-pressed:border-accent aria-pressed:bg-accent"
-        >
-          Edit text
-        </button>
-      </div>
-    )}
-  </main>
+            </div>
+            <div class="mb-3"></div>
+            <h2 class={h2}>Projects</h2>
+            <ul class="list-disc space-y-0.5 ps-3">
+              {r.projects.map((p) => (
+                <li>
+                  <a href={p.href} target="_blank" title={p.label} rel="noreferrer">
+                    {p.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div class="mb-3"></div>
+            <h2 class={h2}>Skills</h2>
+            <ul class="list-disc space-y-0.5 ps-3">
+              {r.skills.map((s) => (
+                <li>{s}</li>
+              ))}
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
 </Base>
 
 <style is:global>
-  @page {
-    size: A4;
-    margin: 0;
-  }
   @media print {
     html {
       background: #fff;
     }
   }
 </style>
-
-<script>
-  // Owner preview (dev only; the toolbar isn't rendered in a build, so this is a no-op there).
-  const bar = document.querySelector<HTMLElement>('[data-devbar]')
-  const sheet = document.querySelector<HTMLElement>('[data-sheet]')
-  if (bar && sheet) {
-    const fit = bar.querySelector<HTMLElement>('[data-fit]')!
-    const edge = document.querySelector<HTMLElement>('[data-page-edge]')!
-    const edgeBtn = bar.querySelector<HTMLElement>('[data-toggle-edge]')!
-    const editBtn = bar.querySelector<HTMLElement>('[data-toggle-edit]')!
-
-    // How much of one A4 page the content uses: % when it fits, mm over when it spills.
-    const measure = () => {
-      const w = sheet.offsetWidth
-      if (!w) return
-      const a4 = (w * 297) / 210
-      const last = sheet.lastElementChild!
-      const pad = parseFloat(getComputedStyle(sheet).paddingBottom) || 0
-      const used = last.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top + pad
-      const over = Math.round(((used - a4) * 210) / w)
-      fit.textContent =
-        over > 0
-          ? `Over by ${over} mm · spills onto page 2`
-          : `Fits on 1 page · ${Math.round((used / a4) * 100)}% used`
-      fit.classList.toggle('text-accent', over > 0)
-    }
-    sheet.addEventListener('input', measure)
-    addEventListener('resize', measure)
-    document.fonts.ready.then(measure)
-
-    edgeBtn.addEventListener('click', () => {
-      const on = edgeBtn.getAttribute('aria-pressed') !== 'true'
-      edgeBtn.setAttribute('aria-pressed', String(on))
-      edge.hidden = !on
-    })
-    editBtn.addEventListener('click', () => {
-      const on = editBtn.getAttribute('aria-pressed') !== 'true'
-      editBtn.setAttribute('aria-pressed', String(on))
-      editBtn.textContent = on ? 'Done' : 'Edit text'
-      sheet.contentEditable = String(on)
-      sheet.toggleAttribute('data-editing', on)
-      if (on) sheet.focus()
-    })
-  }
-</script>
